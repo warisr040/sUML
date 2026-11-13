@@ -1,18 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
 <defs>
 <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14295a"/><stop offset=".55" stop-color="#0a1736"/><stop offset="1" stop-color="#050c1e"/></linearGradient>
-<linearGradient id="side" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b5fa6"/><stop offset=".5" stop-color="#5b7fc2"/><stop offset="1" stop-color="#33549a"/></linearGradient>
-<linearGradient id="top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b4c5e3"/><stop offset="1" stop-color="#8098c6"/></linearGradient>
-<linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#46699f"/><stop offset="1" stop-color="#5b7fc2"/></linearGradient>
+<linearGradient id="hi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2ebfb"/><stop offset="1" stop-color="#a5b8de"/></linearGradient>
+<linearGradient id="ac" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
 </defs>
 <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg)"/>
 <rect x="4.5" y="4.5" width="119" height="119" rx="27.5" fill="none" stroke="#fff" stroke-opacity=".08"/>
-<g transform="translate(6 6)">
-<path d="M28,24 v9 a30,7 0 0 0 60,0 v-9 z" fill="url(#side)"/><ellipse cx="58" cy="24" rx="30" ry="7" fill="url(#top)"/>
-<rect x="28" y="31" width="12" height="27" fill="url(#bar)"/>
-<path d="M28,58 v9 a30,7 0 0 0 60,0 v-9 z" fill="url(#side)"/><ellipse cx="58" cy="58" rx="30" ry="7" fill="url(#top)"/>
-<rect x="76" y="65" width="12" height="25" fill="url(#bar)"/>
-<path d="M28,90 v9 a30,7 0 0 0 60,0 v-9 z" fill="url(#side)"/><ellipse cx="58" cy="90" rx="30" ry="7" fill="url(#top)"/>
-<path d="M28,33 a30,7 0 0 0 60,0 M28,67 a30,7 0 0 0 60,0 M28,99 a30,7 0 0 0 60,0" fill="none" stroke="#dbe6fa" stroke-opacity=".25" stroke-width="1"/>
+<g stroke-linejoin="round">
+<rect x="34" y="15" width="40" height="34" rx="4" fill="#132a5a" stroke="url(#hi)" stroke-width="4"/>
+<path d="M34 27h40" stroke="url(#hi)" stroke-width="3.4"/>
+<path d="M42 21h24" stroke="#e2ebfb" stroke-width="3" stroke-linecap="round"/>
+<path d="M54 49l-6 9h12z" fill="#0a1736" stroke="#c7d4ee" stroke-width="3"/>
+<path d="M54 58v5M29 63h50M29 63v7M79 63v7" fill="none" stroke="#c7d4ee" stroke-width="3.4" stroke-linecap="round"/>
+<rect x="14" y="70" width="30" height="22" rx="3" fill="#132a5a" stroke="url(#hi)" stroke-width="3.6"/>
+<rect x="64" y="70" width="30" height="22" rx="3" fill="#132a5a" stroke="url(#hi)" stroke-width="3.6"/>
 </g>
+<circle cx="95" cy="95" r="18.5" fill="#0a1736"/>
+<circle cx="95" cy="95" r="16" fill="url(#ac)"/>
+<path d="M 91.69 98.53 90.11 100.55 Q 90.76 101.17 91.58 101.71 Q 92.39 102.25 93.4 102.58 Q 94.41 102.9 95.64 102.9 Q 97.61 102.9 98.74 101.94 Q 99.86 100.97 99.86 99.25 Q 99.86 98.2 99.39 97.55 Q 98.91 96.9 98.12 96.46 Q 97.34 96.03 96.41 95.67 Q 95.66 95.35 95.08 95.12 Q 94.49 94.9 94.17 94.61 Q 93.86 94.33 93.86 93.95 Q 93.86 93.53 94.17 93.31 Q 94.49 93.1 95.04 93.1 Q 95.86 93.1 96.72 93.53 Q 97.59 93.95 98.21 94.62 L 99.64 92.62 Q 99.09 92.08 98.36 91.66 Q 97.64 91.25 96.79 91 Q 95.94 90.75 94.96 90.75 Q 93.81 90.75 92.88 91.11 Q 91.94 91.47 91.39 92.19 Q 90.84 92.9 90.84 93.92 Q 90.84 95 91.33 95.69 Q 91.81 96.38 92.56 96.79 Q 93.31 97.2 94.11 97.5 Q 94.96 97.78 95.51 98.03 Q 96.06 98.28 96.35 98.59 Q 96.64 98.9 96.64 99.35 Q 96.64 99.85 96.29 100.14 Q 95.94 100.42 95.29 100.42 Q 94.79 100.42 94.23 100.22 Q 93.66 100.03 93.04 99.61 Q 92.41 99.2 91.69 98.53 Z" fill="#fff"/>
 </svg>

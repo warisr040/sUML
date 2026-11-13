@@ -1,4 +1,4 @@
-sUML - smart UML  version 1.1  (Windows)
+sUML - simply handle IT UML  version 1.4  (Windows)
 
 1. Unzip this file (right-click > Extract All). Don't run it from inside the zip.
 2. Put sUML.exe in a folder you can write to (e.g. Documents\sUML), then double-click it.
