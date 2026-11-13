@@ -99,7 +99,7 @@ func main() {
 		AutoFocus: true,
 		DataPath:  dataDir,
 		WindowOptions: webview2.WindowOptions{
-			Title:  "simply handle IT UML (sUML) 1.5",
+			Title:  "simply handle IT UML (sUML) 1.6",
 			Width:  1440,
 			Height: 900,
 			IconId: 2,

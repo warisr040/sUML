@@ -1,4 +1,4 @@
-# sUML — simply handle IT UML · version 1.5
+# sUML — simply handle IT UML · version 1.6
 
 Offline UML / architecture diagram editor. Nothing is uploaded.
 

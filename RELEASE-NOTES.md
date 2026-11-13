@@ -1,5 +1,10 @@
 # sUML (simply handle IT UML) — release notes
 
+## Version 1.6
+- **Avoid crossing lines** (Settings, off by default): right-angle lines go round other lines instead of crossing them.
+- Lines that end at the same point of a box join for the last stretch with a **junction dot** where they meet (Settings → *Spread shared line ends* gives each its own spot instead).
+- Fix: moving boxes that were selected with a drag box no longer moves a line that was only caught by the box (its other end jumped to the far side of the box). A dragged line's ends now stay on their side.
+
 ## Version 1.5
 - **Smarter right-angle lines** (checked against 195 test layouts: every pair of sides × 11 positions, plus objects in the way):
   - Lines with chosen sides take the fewest bends, then the shortest way (e.g. Bottom → Left to a box down-right is now a plain L).
