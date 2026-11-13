@@ -1,16 +1,18 @@
-# smart UML (sUML)
+# simply handle IT UML (sUML) — website
 
-Simple, offline UML / architecture diagram editor in a single `index.html`.
-Nothing is uploaded — diagrams live in your browser until you **Save / Save As** (`.suml.json`), **SVG** or **PNG**.
+Static site, no build step, nothing loaded from other servers.
 
-Diagram kinds: architecture (software & hardware), use case, dataflow (DFD), activity, class, swimlanes.
+| File | What it is |
+|---|---|
+| `index.html` | Front page |
+| `app.html` | The diagram editor (the whole app, one file) |
+| `manual.html` | User manual |
+| `design.html` | Design document |
+| `shots/` | Screenshots used on the front page |
+| `netlify.toml` | Security headers (`connect-src 'none'`) and the `/app` short link |
 
 ## Deploy to Netlify
 - **Drag & drop:** open https://app.netlify.com/drop and drop this whole folder.
-- **Git:** push this folder to a repo, "Add new site → Import", leave the build command empty, publish directory `.`.
+- **Git:** push the repo, "Add new site → Import", leave the build command empty, publish directory `web`.
 
-`netlify.toml` adds a Content-Security-Policy with `connect-src 'none'`, so the page cannot send data anywhere.
-
-## Files
-- `index.html` — the whole app (no dependencies)
-- `netlify.toml` — Netlify config / security headers
+Diagrams live in the visitor's browser until they **Save / Save As** (`.suml.json`), **SVG** or **PNG**.

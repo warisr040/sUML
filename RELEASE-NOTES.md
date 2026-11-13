@@ -1,4 +1,47 @@
-# sUML (smart UML) — release notes
+# sUML (simply handle IT UML) — release notes
+
+## Version 1.6
+- **Avoid crossing lines** (Settings, off by default): right-angle lines go round other lines instead of crossing them.
+- Lines that end at the same point of a box join for the last stretch with a **junction dot** where they meet (Settings → *Spread shared line ends* gives each its own spot instead).
+- Fix: moving boxes that were selected with a drag box no longer moves a line that was only caught by the box (its other end jumped to the far side of the box). A dragged line's ends now stay on their side.
+
+## Version 1.5
+- **Smarter right-angle lines** (checked against 195 test layouts: every pair of sides × 11 positions, plus objects in the way):
+  - Lines with chosen sides take the fewest bends, then the shortest way (e.g. Bottom → Left to a box down-right is now a plain L).
+  - When something is in the way, every pair of sides is tried and the cheapest clear route wins; lines no longer run through an object that sits close to a box.
+  - The short stub at each end never starts inside a nearby object; no more hair-thin diagonal steps around obstacles.
+  - Auto lines keep the Z shape with neat fan-out of parallel lines.
+- **Pictures on the canvas:** paste a screenshot with Ctrl+V (Snipping Tool, Win+Shift+S), drop an image file, or use *Picture* in General shapes. Up to 1000 px; corners keep the proportions (Shift stretches); Replace picture, Original proportions, optional frame. Ctrl+C / Ctrl+V copy pictures inside sUML and to other apps.
+- **Themes** in Settings: all five in one row.
+
+## Version 1.4
+- **New name:** sUML now stands for **simply handle IT UML**, with a new icon: a small UML diagram with an “s” badge.
+- View, Pen and Path are icon-only buttons (names show on hover).
+- **Snip** (top bar, replaces the SVG / PNG buttons): works like Snipping Tool. Drag over part of the canvas, or click once for the whole view; the picture goes straight to the clipboard (paste with Ctrl+V) and a card offers Save PNG…, Save SVG…, Copy again and New snip. "Whole diagram" snips everything. Snips use the colours you see on screen and include visible path lines. Can also go on a shortcut slot.
+- **Save As** can now save the whole diagram as a **PNG** or **SVG** picture (pick the type in the dialog); the diagram's own .suml.json file is not changed by that.
+- **Tidier top bar:**
+  - **View** menu (beside zoom) holds Fit, Grid, Snap and Smart, each with ON / OFF; a dot on the button shows Smart is on.
+  - **Theme** moved into ⚙ Settings (with the picture background choice).
+  - **Path** sits right of Pen: Pen · Path · Comment.
+  - Labels fold away step by step on narrower windows so every button stays reachable at the exe's minimum width.
+
+## Version 1.3
+- **Groups:** select objects → Ctrl+G (or right-click → Group). Click any member to select the whole group and move it together; Alt+click picks one member; Ctrl+Shift+G ungroups. Lines between grouped shapes join the group. Copy / paste / duplicate makes a separate group.
+- **Groups in Favorites:** right-click → *Add to Favorites as a group*. Click the favourite (or drag it onto the canvas, or put it on a shortcut slot) to insert a copy.
+- **Text position** for every shape with a text box and every line label: Top / Mid / Bottom × Left / Center / Right (Properties panel). For lines, Left / Center / Right = near the start, middle or end; Top / Bottom = above or below the line.
+
+## Version 1.2
+- **Path lines** (⟿ Path in the top bar): trace a route through the diagram on its own layer, with its own window.
+  - Click objects in order; the route follows existing lines between them, otherwise it finds its own way around objects.
+  - One path line holds many scenarios; click one to show it. Shown / Hidden per path line and for all.
+  - Effects: Running colour, Highlight, Blink, None. Six colour themes, each with two toned-down levels (Soft, Muted). Direction Forward / Reverse / Both, three speeds, numbered steps.
+  - Objects on the route light up with the same highlight and theme.
+  - Optional: include visible path lines in PNG / SVG export (still image).
+- **Highlight** shapes and lines from the right-click menu (5 colours); **Clear all highlights** from any right-click menu.
+- **Shortcut actions:** Draw line, Comment mode, Highlight on/off, Clear highlights, Path line on/off, Next scenario and Path lines window can go on Ctrl / Alt slots.
+- **Draw line:** the end now snaps onto the destination's border, like the start.
+- **Snap** puts shapes on the visible grid dots (20 units).
+- **Comment pictures** open in a zoomable viewer (double-click in the box, or click the thumbnail): wheel / pinch zoom up to 16×, drag to pan, Fit, 100%.
 
 ## Version 1.1
 - **Code panel** (button at the bottom right, or Ctrl+`): the diagram as editable text.

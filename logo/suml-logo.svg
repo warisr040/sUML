@@ -1,18 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-<defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><defs>
 <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14295a"/><stop offset=".55" stop-color="#0a1736"/><stop offset="1" stop-color="#050c1e"/></linearGradient>
-<linearGradient id="side" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b5fa6"/><stop offset=".5" stop-color="#5b7fc2"/><stop offset="1" stop-color="#33549a"/></linearGradient>
-<linearGradient id="top" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b4c5e3"/><stop offset="1" stop-color="#8098c6"/></linearGradient>
-<linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#46699f"/><stop offset="1" stop-color="#5b7fc2"/></linearGradient>
+<linearGradient id="hi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2ebfb"/><stop offset="1" stop-color="#a5b8de"/></linearGradient>
+<linearGradient id="ac" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
 </defs>
 <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg)"/>
-<rect x="4.5" y="4.5" width="119" height="119" rx="27.5" fill="none" stroke="#fff" stroke-opacity=".08"/>
-<g transform="translate(6 6)">
-<path d="M28,24 v9 a30,7 0 0 0 60,0 v-9 z" fill="url(#side)"/><ellipse cx="58" cy="24" rx="30" ry="7" fill="url(#top)"/>
-<rect x="28" y="31" width="12" height="27" fill="url(#bar)"/>
-<path d="M28,58 v9 a30,7 0 0 0 60,0 v-9 z" fill="url(#side)"/><ellipse cx="58" cy="58" rx="30" ry="7" fill="url(#top)"/>
-<rect x="76" y="65" width="12" height="25" fill="url(#bar)"/>
-<path d="M28,90 v9 a30,7 0 0 0 60,0 v-9 z" fill="url(#side)"/><ellipse cx="58" cy="90" rx="30" ry="7" fill="url(#top)"/>
-<path d="M28,33 a30,7 0 0 0 60,0 M28,67 a30,7 0 0 0 60,0 M28,99 a30,7 0 0 0 60,0" fill="none" stroke="#dbe6fa" stroke-opacity=".25" stroke-width="1"/>
-</g>
-</svg>
+<rect x="4.5" y="4.5" width="119" height="119" rx="27.5" fill="none" stroke="#fff" stroke-opacity=".08"/><g stroke-linejoin="round">
+<rect x="44" y="19" width="40" height="34" rx="4" fill="#132a5a" stroke="url(#hi)" stroke-width="4"/>
+<path d="M44 31h40" stroke="url(#hi)" stroke-width="3.4"/>
+<path d="M52 25h24" stroke="#e2ebfb" stroke-width="3" stroke-linecap="round"/>
+<path d="M64 53l-6 9h12z" fill="#0a1736" stroke="#c7d4ee" stroke-width="3"/>
+<path d="M64 62v5M38.0 67h52.0M38.0 67v7M90.0 67v7" fill="none" stroke="#c7d4ee" stroke-width="3.4" stroke-linecap="round"/>
+<rect x="23" y="74" width="30" height="22" rx="3" fill="#132a5a" stroke="url(#hi)" stroke-width="3.6"/>
+<rect x="75" y="74" width="30" height="22" rx="3" fill="#132a5a" stroke="url(#hi)" stroke-width="3.6"/>
+</g><circle cx="97" cy="92" r="18.5" fill="#0a1736"/><circle cx="97" cy="92" r="16" fill="url(#ac)"/><path d="M93.6875 95.525 92.1125 97.55Q92.7625 98.175 93.575 98.7125Q94.3875 99.25 95.4 99.575Q96.41250000000001 99.9 97.6375 99.9Q99.6125 99.9 100.73750000000001 98.9375Q101.86250000000001 97.975 101.86250000000001 96.25Q101.86250000000001 95.2 101.38750000000002 94.55000000000001Q100.91250000000001 93.9 100.125 93.4625Q99.3375 93.025 98.41250000000001 92.675Q97.66250000000001 92.35 97.075 92.125Q96.4875 91.9 96.175 91.61250000000001Q95.8625 91.325 95.8625 90.95Q95.8625 90.525 96.175 90.3125Q96.4875 90.1 97.03750000000001 90.1Q97.8625 90.1 98.725 90.525Q99.5875 90.95 100.2125 91.625L101.6375 89.625Q101.0875 89.075 100.36250000000001 88.6625Q99.6375 88.25 98.7875 88.0Q97.9375 87.75 96.9625 87.75Q95.8125 87.75 94.875 88.1125Q93.9375 88.475 93.3875 89.1875Q92.8375 89.9 92.8375 90.925Q92.8375 92.0 93.325 92.6875Q93.8125 93.375 94.5625 93.7875Q95.3125 94.2 96.1125 94.5Q96.9625 94.775 97.5125 95.025Q98.0625 95.275 98.35 95.5875Q98.6375 95.9 98.6375 96.35Q98.6375 96.85 98.2875 97.13749999999999Q97.9375 97.425 97.28750000000001 97.425Q96.78750000000001 97.425 96.22500000000001 97.225Q95.66250000000001 97.025 95.03750000000001 96.61250000000001Q94.41250000000001 96.2 93.6875 95.525Z" fill="#fff"/></svg>
