@@ -1,5 +1,14 @@
 # sUML (simply handle IT UML) — release notes
 
+## Version 1.5
+- **Smarter right-angle lines** (checked against 195 test layouts: every pair of sides × 11 positions, plus objects in the way):
+  - Lines with chosen sides take the fewest bends, then the shortest way (e.g. Bottom → Left to a box down-right is now a plain L).
+  - When something is in the way, every pair of sides is tried and the cheapest clear route wins; lines no longer run through an object that sits close to a box.
+  - The short stub at each end never starts inside a nearby object; no more hair-thin diagonal steps around obstacles.
+  - Auto lines keep the Z shape with neat fan-out of parallel lines.
+- **Pictures on the canvas:** paste a screenshot with Ctrl+V (Snipping Tool, Win+Shift+S), drop an image file, or use *Picture* in General shapes. Up to 1000 px; corners keep the proportions (Shift stretches); Replace picture, Original proportions, optional frame. Ctrl+C / Ctrl+V copy pictures inside sUML and to other apps.
+- **Themes** in Settings: all five in one row.
+
 ## Version 1.4
 - **New name:** sUML now stands for **simply handle IT UML**, with a new icon: a small UML diagram with an “s” badge.
 - View, Pen and Path are icon-only buttons (names show on hover).

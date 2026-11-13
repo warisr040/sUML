@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>simply handle IT UML (sUML) 1.4 — offline diagram tool</title>
+<title>simply handle IT UML (sUML) 1.5 — offline diagram tool</title>
 <meta name="description" content="simply handle IT UML (sUML) — simple offline UML / architecture diagram editor. Nothing is uploaded — export your diagram as a file.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22%3E%3Cdefs%3E%3ClinearGradient id=%22bg%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%2314295a%22/%3E%3Cstop offset=%22.55%22 stop-color=%22%230a1736%22/%3E%3Cstop offset=%221%22 stop-color=%22%23050c1e%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22hi%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23e2ebfb%22/%3E%3Cstop offset=%221%22 stop-color=%22%23a5b8de%22/%3E%3C/linearGradient%3E%3ClinearGradient id=%22ac%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%237dd3fc%22/%3E%3Cstop offset=%221%22 stop-color=%22%236366f1%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x=%224%22 y=%224%22 width=%22120%22 height=%22120%22 rx=%2228%22 fill=%22url%28%23bg%29%22/%3E%3Crect x=%224.5%22 y=%224.5%22 width=%22119%22 height=%22119%22 rx=%2227.5%22 fill=%22none%22 stroke=%22%23fff%22 stroke-opacity=%22.08%22/%3E%3Cg stroke-linejoin=%22round%22%3E%3Crect x=%2234%22 y=%2215%22 width=%2240%22 height=%2234%22 rx=%224%22 fill=%22%23132a5a%22 stroke=%22url%28%23hi%29%22 stroke-width=%224%22/%3E%3Cpath d=%22M34 27h40%22 stroke=%22url%28%23hi%29%22 stroke-width=%223.4%22/%3E%3Cpath d=%22M42 21h24%22 stroke=%22%23e2ebfb%22 stroke-width=%223%22 stroke-linecap=%22round%22/%3E%3Cpath d=%22M54 49l-6 9h12z%22 fill=%22%230a1736%22 stroke=%22%23c7d4ee%22 stroke-width=%223%22/%3E%3Cpath d=%22M54 58v5M29 63h50M29 63v7M79 63v7%22 fill=%22none%22 stroke=%22%23c7d4ee%22 stroke-width=%223.4%22 stroke-linecap=%22round%22/%3E%3Crect x=%2214%22 y=%2270%22 width=%2230%22 height=%2222%22 rx=%223%22 fill=%22%23132a5a%22 stroke=%22url%28%23hi%29%22 stroke-width=%223.6%22/%3E%3Crect x=%2264%22 y=%2270%22 width=%2230%22 height=%2222%22 rx=%223%22 fill=%22%23132a5a%22 stroke=%22url%28%23hi%29%22 stroke-width=%223.6%22/%3E%3C/g%3E%3Ccircle cx=%2295%22 cy=%2295%22 r=%2218.5%22 fill=%22%230a1736%22/%3E%3Ccircle cx=%2295%22 cy=%2295%22 r=%2216%22 fill=%22url%28%23ac%29%22/%3E%3Cpath d=%22M 91.69 98.53 90.11 100.55 Q 90.76 101.17 91.58 101.71 Q 92.39 102.25 93.4 102.58 Q 94.41 102.9 95.64 102.9 Q 97.61 102.9 98.74 101.94 Q 99.86 100.97 99.86 99.25 Q 99.86 98.2 99.39 97.55 Q 98.91 96.9 98.12 96.46 Q 97.34 96.03 96.41 95.67 Q 95.66 95.35 95.08 95.12 Q 94.49 94.9 94.17 94.61 Q 93.86 94.33 93.86 93.95 Q 93.86 93.53 94.17 93.31 Q 94.49 93.1 95.04 93.1 Q 95.86 93.1 96.72 93.53 Q 97.59 93.95 98.21 94.62 L 99.64 92.62 Q 99.09 92.08 98.36 91.66 Q 97.64 91.25 96.79 91 Q 95.94 90.75 94.96 90.75 Q 93.81 90.75 92.88 91.11 Q 91.94 91.47 91.39 92.19 Q 90.84 92.9 90.84 93.92 Q 90.84 95 91.33 95.69 Q 91.81 96.38 92.56 96.79 Q 93.31 97.2 94.11 97.5 Q 94.96 97.78 95.51 98.03 Q 96.06 98.28 96.35 98.59 Q 96.64 98.9 96.64 99.35 Q 96.64 99.85 96.29 100.14 Q 95.94 100.42 95.29 100.42 Q 94.79 100.42 94.23 100.22 Q 93.66 100.03 93.04 99.61 Q 92.41 99.2 91.69 98.53 Z%22 fill=%22%23fff%22/%3E%3C/svg%3E">
 <style>
@@ -348,12 +348,12 @@ main#stage::before{content:"";position:absolute;inset:0;background:var(--canvas-
 .palbtn{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line-2);background:var(--field);color:var(--text);border-radius:8px;padding:3px 6px 3px 4px;cursor:pointer;font:inherit;font-size:11px}
 .palbtn i{width:18px;height:18px;border-radius:5px;border:1px solid rgba(0,0,0,.18);display:block}
 .palbtn:hover{border-color:var(--accent)}
-.thgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.thcard{border:1.5px solid var(--line-2);border-radius:10px;padding:6px;background:none;cursor:pointer;text-align:left;font:inherit;color:var(--text)}
+.thgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-bottom:10px}
+.thcard{border:1.5px solid var(--line-2);border-radius:9px;padding:4px;min-width:0;background:none;cursor:pointer;text-align:left;font:inherit;color:var(--text)}
 .thcard.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
-.thcard .prev{height:46px;border-radius:7px;position:relative;overflow:hidden;margin-bottom:5px}
+.thcard .prev{height:30px;border-radius:6px;position:relative;overflow:hidden;margin-bottom:3px}
 .thcard .prev i{position:absolute;border-radius:3px}
-.thcard b{font-size:12px}
+.thcard b{display:block;font-size:10px;line-height:1.15;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #canvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none;display:block}
 #stage.panning #canvas{cursor:grab}
 #stage.dropping{box-shadow:inset 0 0 0 3px var(--accent-line)}
@@ -403,7 +403,7 @@ body.barup #toast{bottom:104px}
   <header class="glass">
     <div class="brand">
       <span class="logo"><svg width="32" height="32" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><defs><linearGradient id="hdbg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14295a"/><stop offset=".55" stop-color="#0a1736"/><stop offset="1" stop-color="#050c1e"/></linearGradient><linearGradient id="hdhi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e2ebfb"/><stop offset="1" stop-color="#a5b8de"/></linearGradient><linearGradient id="hdac" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs><rect x="4" y="4" width="120" height="120" rx="28" fill="url(#hdbg)"/><rect x="4.5" y="4.5" width="119" height="119" rx="27.5" fill="none" stroke="#fff" stroke-opacity=".08"/><g stroke-linejoin="round"><rect x="34" y="15" width="40" height="34" rx="4" fill="#132a5a" stroke="url(#hdhi)" stroke-width="4"/><path d="M34 27h40" stroke="url(#hdhi)" stroke-width="3.4"/><path d="M42 21h24" stroke="#e2ebfb" stroke-width="3" stroke-linecap="round"/><path d="M54 49l-6 9h12z" fill="#0a1736" stroke="#c7d4ee" stroke-width="3"/><path d="M54 58v5M29 63h50M29 63v7M79 63v7" fill="none" stroke="#c7d4ee" stroke-width="3.4" stroke-linecap="round"/><rect x="14" y="70" width="30" height="22" rx="3" fill="#132a5a" stroke="url(#hdhi)" stroke-width="3.6"/><rect x="64" y="70" width="30" height="22" rx="3" fill="#132a5a" stroke="url(#hdhi)" stroke-width="3.6"/></g><circle cx="95" cy="95" r="18.5" fill="#0a1736"/><circle cx="95" cy="95" r="16" fill="url(#hdac)"/><path d="M 91.69 98.53 90.11 100.55 Q 90.76 101.17 91.58 101.71 Q 92.39 102.25 93.4 102.58 Q 94.41 102.9 95.64 102.9 Q 97.61 102.9 98.74 101.94 Q 99.86 100.97 99.86 99.25 Q 99.86 98.2 99.39 97.55 Q 98.91 96.9 98.12 96.46 Q 97.34 96.03 96.41 95.67 Q 95.66 95.35 95.08 95.12 Q 94.49 94.9 94.17 94.61 Q 93.86 94.33 93.86 93.95 Q 93.86 93.53 94.17 93.31 Q 94.49 93.1 95.04 93.1 Q 95.86 93.1 96.72 93.53 Q 97.59 93.95 98.21 94.62 L 99.64 92.62 Q 99.09 92.08 98.36 91.66 Q 97.64 91.25 96.79 91 Q 95.94 90.75 94.96 90.75 Q 93.81 90.75 92.88 91.11 Q 91.94 91.47 91.39 92.19 Q 90.84 92.9 90.84 93.92 Q 90.84 95 91.33 95.69 Q 91.81 96.38 92.56 96.79 Q 93.31 97.2 94.11 97.5 Q 94.96 97.78 95.51 98.03 Q 96.06 98.28 96.35 98.59 Q 96.64 98.9 96.64 99.35 Q 96.64 99.85 96.29 100.14 Q 95.94 100.42 95.29 100.42 Q 94.79 100.42 94.23 100.22 Q 93.66 100.03 93.04 99.61 Q 92.41 99.2 91.69 98.53 Z" fill="#fff"/></svg></span>
-      <span style="display:flex;flex-direction:column;line-height:1.05">sUML<small style="font-weight:500;font-size:10.5px;color:var(--muted);letter-spacing:.02em">simply handle IT UML · v1.4</small></span>
+      <span style="display:flex;flex-direction:column;line-height:1.05">sUML<small style="font-weight:500;font-size:10.5px;color:var(--muted);letter-spacing:.02em">simply handle IT UML · v1.5</small></span>
     </div>
     <input id="title" type="text" value="Untitled diagram" title="Diagram name (used as the file name)">
     <div class="tb">
@@ -473,6 +473,7 @@ body.barup #toast{bottom:104px}
   <div id="penBar" class="glass" hidden></div>
   <div id="cmtBar" class="glass" hidden></div>
   <input type="file" id="imgIn" accept="image/*" multiple hidden>
+  <input type="file" id="picIn" accept="image/*" multiple hidden>
   <div id="colorPop" class="glass" hidden></div>
   <div id="smartOpt" class="glass" hidden></div>
   <div id="ctxMenu" class="glass" hidden></div>
@@ -500,7 +501,7 @@ body.barup #toast{bottom:104px}
 <script>
 (() => {
 'use strict';
-const APP_VERSION = '1.4';
+const APP_VERSION = '1.5';
 
 /* ================= basics ================= */
 const FONT = 'Segoe UI, Roboto, Helvetica, Arial, sans-serif';
@@ -543,6 +544,7 @@ const TX = (n, b, o = {}) => {
   const y = n.va === 't' ? b.y + 4 + H / 2 : n.va === 'b' ? b.y + b.h - 4 - H / 2 : b.y + b.h / 2;
   return textSvg(lines, x, y, { fs: n.fs, color: n.color, bold: o.bold, anchor: n.ha === 'l' ? 'start' : n.ha === 'r' ? 'end' : 'middle' });
 };
+const PIC_RE = /^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/;
 const TXT_ALIGN_OK = t => SH[t] && !SH[t].noText && /\bTX\(/.test(String(SH[t].render));
 const dashA = v => v === 'dot' ? ' stroke-dasharray="0.1 3.6" stroke-linecap="round"' : v ? ' stroke-dasharray="6 4"' : '';
 const dashE = (v, w = 1.5) => { const k = Math.max(1, w / 1.5); return v === 'dot' ? ` stroke-dasharray="0.1 ${f1(4 * k)}" stroke-linecap="round"` : v ? ` stroke-dasharray="${f1(7 * k)} ${f1(5 * k)}"` : ''; };
@@ -604,6 +606,11 @@ const SH = {
             render: n => `<path d="M0,0 H${n.w} V${n.h - 10} Q${n.w * .75},${n.h - 22} ${n.w / 2},${n.h - 10} T0,${n.h - 10} Z" ${P(n)}/>` + TX(n, { x: 0, y: 0, w: n.w, h: n.h - 12 }) },
   note:   { name: 'Note', w: 150, h: 70, text: 'Note', fill: '#fff8c5', stroke: '#b59f3b',
             render: n => `<path d="M0,0 H${n.w - 14} L${n.w},14 V${n.h} H0 Z" ${P(n)}/><path d="M${n.w - 14},0 V14 H${n.w}" fill="none" stroke="${n.stroke}" stroke-width="1.2"/>` + TX(n, { x: 0, y: 0, w: n.w, h: n.h }) },
+  image:  { name: 'Picture', w: 240, h: 160, text: '', fill: 'transparent', stroke: '#94a3b8', noText: true,
+            render: n => { const ok = PIC_RE.test(n.src || '');
+              return `<rect width="${n.w}" height="${n.h}" fill="${ok ? 'transparent' : '#f1f5f9'}" stroke="${ok ? 'none' : '#94a3b8'}" stroke-dasharray="${ok ? '' : '5 4'}"/>`
+                + (ok ? `<image href="${n.src}" width="${n.w}" height="${n.h}" preserveAspectRatio="none"/>` : `<text x="${n.w / 2}" y="${n.h / 2}" text-anchor="middle" dominant-baseline="central" font-size="12" fill="#64748b">🖼 Picture</text>`)
+                + (n.border ? `<rect width="${n.w}" height="${n.h}" fill="none" stroke="${n.stroke}" stroke-width="1.5"${dashA(n.dash)}/>` : ''); } },
   text:   { name: 'Text', w: 120, h: 30, text: 'Text', fill: 'transparent', stroke: 'transparent',
             render: n => `<rect width="${n.w}" height="${n.h}" ${P(n)}/>` + TX(n, { x: 0, y: 0, w: n.w, h: n.h }) },
   cloud:  { name: 'Cloud', w: 150, h: 90, text: 'Internet', outline: 'ellipse',
@@ -679,7 +686,7 @@ function mk(type, x, y, props = {}) { return Object.assign({ id: rid('n'), type,
 
 /* ================= palette definition ================= */
 const PALETTE = [
-  ['General', [['rect', 'Box'], ['round', 'Rounded'], ['ellipse', 'Ellipse'], ['diamond', 'Diamond'], ['text', 'Text'], ['note', 'Note']]],
+  ['General', [['rect', 'Box'], ['round', 'Rounded'], ['ellipse', 'Ellipse'], ['diamond', 'Diamond'], ['text', 'Text'], ['note', 'Note'], ['image', 'Picture']]],
   ['Flowchart', [['terminator', 'Start / End'], ['rect', 'Process', { text: 'Process' }], ['diamond', 'Decision', { text: 'Yes?', w: 120, h: 80 }], ['parallelogram', 'Input / Output'], ['predefined', 'Predefined'], ['document', 'Document'], ['manualinput', 'Manual input'], ['hexagon', 'Preparation'], ['database', 'Data'], ['delay', 'Delay'], ['ellipse', 'Connector', { w: 40, h: 40, text: 'A' }], ['offpage', 'Off-page']]],
   ['Architecture', [['component', 'Component'], ['device', 'Server / HW'], ['database', 'Database'], ['cloud', 'Cloud'], ['document', 'Document'], ['package', 'Package / layer'], ['frame', 'Group', { text: 'Group', dash: true, fill: '#f8fafc' }]]],
   ['Use Case', [['actor', 'Actor'], ['ellipse', 'Use case', { w: 150, h: 60, text: 'Use case' }], ['frame', 'System boundary', { text: 'System', w: 300, h: 360 }], ['note', 'Note']]],
@@ -790,7 +797,29 @@ function edgePoints0(e) {
       const p1 = sidePt(a, 0, s, x1), p2 = sidePt(b, 0, -s, x2), my = (p1.y + p2.y) / 2;
       pts = [p1, { x: p1.x, y: my }, { x: p2.x, y: my }, p2];
     }
-    if (avoidObj().on && avoidObj().steps > 0 && routing() && a.type !== '_pt' && b.type !== '_pt' && routeHits(pts, a.id, b.id)) return dedupePts(anchoredPts(e, a, b, autoSide(a, cb), autoSide(b, ca)));
+    if (avoidObj().on && avoidObj().steps > 0 && routing() && a.type !== '_pt' && b.type !== '_pt' && routeHits(pts, a.id, b.id)) {
+      // something is in the way: try every pair of sides and keep the cheapest route that stays clear
+      let best = null, bc = Infinity;
+      const pairs = [[autoSide(a, cb), autoSide(b, ca)], ...['top', 'right', 'bottom', 'left'].flatMap(x => ['top', 'right', 'bottom', 'left'].map(y => [x, y]))];
+      for (const [A, B] of pairs) {
+        const q = dedupePts(anchoredPts(e, a, b, A, B));
+        if (q.some((p, i) => i && Math.abs(p.x - q[i - 1].x) > .5 && Math.abs(p.y - q[i - 1].y) > .5)) continue;   // not a right-angle route
+        const c = pathCost(q) + (routeHits(q, a.id, b.id) ? 2000 : 0);
+        if (c < bc - 1) { best = q; bc = c; }
+      }
+      return best || dedupePts(anchoredPts(e, a, b, autoSide(a, cb), autoSide(b, ca)));
+    }
+    // Smart: when the boxes sit diagonally, an L (one bend) beats a Z (two bends)
+    if (ui.smart && ui.autoL && routing() && a.type !== '_pt' && b.type !== '_pt' && dedupePts(pts).length > 3) {
+      const hA = dx >= 0 ? 'right' : 'left', vA = dy >= 0 ? 'bottom' : 'top', hB = dx >= 0 ? 'left' : 'right', vB = dy >= 0 ? 'top' : 'bottom';
+      const objOn = avoidObj().on && avoidObj().steps > 0;
+      let best = pts, bc = pathCost(pts);
+      for (const [A, B] of [[hA, vB], [vA, hB]]) {
+        const q = dedupePts(anchoredPts(e, a, b, A, B)), c = pathCost(q) + (objOn && routeHits(q, a.id, b.id) ? 1000 : 0);
+        if (c < bc - 1) { best = q; bc = c; }
+      }
+      pts = best;
+    }
   } else pts = [clip(a, cb), clip(b, ca)];
   return dedupePts(pts);
 }
@@ -877,10 +906,11 @@ function orthoRoute(s1, e1, d1, d2, opt = {}) {
   const M = 12, BEND = 24, r1 = v => Math.round(v * 10) / 10, lines = opt.lines || [], maxBends = opt.maxBends ?? avoidObj().steps, useObj = avoidObj().on;
   const lo = { x: Math.min(s1.x, e1.x) - 320, y: Math.min(s1.y, e1.y) - 320 }, hi = { x: Math.max(s1.x, e1.x) + 320, y: Math.max(s1.y, e1.y) + 320 };
   const rects = (useObj ? obstacleRects() : []).filter(r => r.x2 > lo.x && r.x1 < hi.x && r.y2 > lo.y && r.y1 < hi.y).map(r => ({ x1: r.x1 - M, y1: r.y1 - M, x2: r.x2 + M, y2: r.y2 + M }));
-  for (const r of rects) { const inR = q => q.x > r.x1 && q.x < r.x2 && q.y > r.y1 && q.y < r.y2; if (inR(s1) || inR(e1)) { r.x1 += M - 1; r.y1 += M - 1; r.x2 -= M - 1; r.y2 -= M - 1; } }
+  for (const r of rects) { const inR = q => q.x > r.x1 && q.x < r.x2 && q.y > r.y1 && q.y < r.y2; if (inR(s1) || inR(e1)) { r.x1 += M + 1; r.y1 += M + 1; r.x2 -= M + 1; r.y2 -= M + 1; } }
   const key = [maxBends, lines.length ? lines.map(q => `${r1(q[0].x)},${r1(q[0].y)},${r1(q[1].x)},${r1(q[1].y)}`).join(';') : '', r1(s1.x), r1(s1.y), r1(e1.x), r1(e1.y), dirIdx(d1), dirIdx(d2), ...rects.map(r => `${r1(r.x1)},${r1(r.y1)},${r1(r.x2)},${r1(r.y2)}`)].join('|');
   if (ROUTE_CACHE.has(key)) return ROUTE_CACHE.get(key);
-  const uniq = a => [...new Set(a.map(r1))].sort((p, q) => p - q);
+  // coordinates closer than 1 unit merge (the first ones — start, end — win), so the path never gets a hair-thin diagonal step
+  const uniq = a => { const out = []; for (const v of a.map(r1)) if (!out.some(u => Math.abs(u - v) < 1)) out.push(v); return out.sort((p, q) => p - q); };
   const T = 12;   // spacing of a parallel track next to a busy line
   const lx = lines.flatMap(q => Math.abs(q[0].x - q[1].x) < 0.5 ? [q[0].x - T, q[0].x + T] : []), ly = lines.flatMap(q => Math.abs(q[0].y - q[1].y) < 0.5 ? [q[0].y - T, q[0].y + T] : []);
   const xs = uniq([s1.x, e1.x, (s1.x + e1.x) / 2, ...rects.flatMap(r => [r.x1, r.x2]), ...lx]);
@@ -942,6 +972,12 @@ function orthoRoute(s1, e1, d1, d2, opt = {}) {
   ROUTE_CACHE.set(key, out);
   return out;
 }
+// cost of a route: every bend counts like 40 units of length, so fewer bends win unless the detour is much longer
+function pathCost(pts) {
+  const q = dedupePts(pts.map(p => ({ x: p.x, y: p.y })));
+  let L = 0; for (let i = 1; i < q.length; i++) L += Math.abs(q[i].x - q[i - 1].x) + Math.abs(q[i].y - q[i - 1].y);
+  return (q.length - 2) * 40 + L * .05;
+}
 function autoSide(n, t) { const c = ctr(n), dx = t.x - c.x, dy = t.y - c.y; return Math.abs(dx) >= Math.abs(dy) ? (dx >= 0 ? 'right' : 'left') : (dy >= 0 ? 'bottom' : 'top'); }
 function anchoredPts(e, a, b, sa, sb) {
   const ta = sa !== 'auto' ? anchorPt(a, sa, e.fromAt) : ctr(a), tb = sb !== 'auto' ? anchorPt(b, sb, e.toAt) : ctr(b);
@@ -959,8 +995,17 @@ function anchoredPts(e, a, b, sa, sb) {
     const gap = d1[0] ? (q2.x - q1.x) * d1[0] : (q2.y - q1.y) * d1[1];
     if (gap > 0) G = gap < 4 * UG ? Math.min(UG, gap / 2) : Math.min(G, gap / 2);
   }
-  const s1 = d1 && a.type !== '_pt' ? { x: q1.x + d1[0] * G, y: q1.y + d1[1] * G } : p1;
-  const e1 = d2 && b.type !== '_pt' ? { x: q2.x + d2[0] * G, y: q2.y + d2[1] * G } : p2;
+  // a stub must not end inside (or right next to) another object, or the router starts inside it and gives up
+  const stubLen = (q, d, own) => {
+    if (!d || !G) return 0;
+    const rs = avoidObj().on ? obstacleRects().filter(r => r.id !== own && r.id !== a.id && r.id !== b.id) : [];
+    const bad = L => { const x = q.x + d[0] * L, y = q.y + d[1] * L; return rs.some(r => x > r.x1 - 12 && x < r.x2 + 12 && y > r.y1 - 12 && y < r.y2 + 12); };
+    for (let L = G; L >= 4; L /= 2) if (!bad(L)) return L;
+    return 0;
+  };
+  const G1 = stubLen(q1, d1, a.id), G2 = stubLen(q2, d2, b.id);
+  const s1 = d1 && a.type !== '_pt' ? { x: q1.x + d1[0] * G1, y: q1.y + d1[1] * G1 } : p1;
+  const e1 = d2 && b.type !== '_pt' ? { x: q2.x + d2[0] * G2, y: q2.y + d2[1] * G2 } : p2;
   const h1 = d1 ? d1[0] !== 0 : Math.abs(e1.x - s1.x) >= Math.abs(e1.y - s1.y), h2 = d2 ? d2[0] !== 0 : h1;
   let mid;
   const same = d1 && d2 && d1[0] === d2[0] && d1[1] === d2[1];
@@ -985,7 +1030,16 @@ function anchoredPts(e, a, b, sa, sb) {
   }
   const aId = a.type === '_pt' ? null : a.id, bId = b.type === '_pt' ? null : b.id;
   const objOn = avoidObj().on && avoidObj().steps > 0;
-  const scored = cands.map((c, i) => [c, back(c) * 1000 + (objOn && routing() && routeHits([s1, ...c, e1], aId, bId) ? 500 : 0) + i]).sort((x, y) => x[1] - y[1]);
+  if (ui.smart && d1 && d2 && a.type !== '_pt' && b.type !== '_pt') {
+    // a plain L or straight line from side to side, when it leaves and arrives the right way and is clear of boxes
+    const fwd = (u, v, d) => (v.x - u.x) * d[0] + (v.y - u.y) * d[1];
+    const direct = [];
+    if (d1[0] && d2[0] && Math.abs(q1.y - q2.y) < .5 && d1[0] === -d2[0] && fwd(q1, q2, d1) >= 8) direct.push([q1, q2]);
+    if (d1[1] && d2[1] && Math.abs(q1.x - q2.x) < .5 && d1[1] === -d2[1] && fwd(q1, q2, d1) >= 8) direct.push([q1, q2]);
+    if (!!d1[0] !== !!d2[0]) { const c = d1[0] ? { x: q2.x, y: q1.y } : { x: q1.x, y: q2.y }; if (fwd(q1, c, d1) >= 8 && fwd(c, q2, [-d2[0], -d2[1]]) >= 20) direct.push([q1, c, q2]); }   // last leg long enough to show the arrow
+    for (const dp of direct) if (!(objOn && routing() && routeHits(dp, aId, bId))) return [p1, ...dp, p2];
+  }
+  const scored = cands.map(c => [c, back(c) * 1000 + (objOn && routing() && routeHits([s1, ...c, e1], aId, bId) ? 500 : 0) + pathCost([p1, q1, s1, ...c, e1, q2, p2])]).sort((x, y) => x[1] - y[1]);
   mid = scored[0][0];
   if (routing() && scored[0][1] >= 500) { const r = orthoRoute(s1, e1, d1, d2); if (r) mid = r; }
   return [p1, q1, s1, ...mid, e1, q2, p2];
@@ -1610,7 +1664,7 @@ function modal({ title, body, buttons }) {
 function cleanAlign(o) { if (!['l', 'r'].includes(o.ha)) delete o.ha; if (!['t', 'b'].includes(o.va)) delete o.va; }
 function normalize(obj) {
   const nodes = (obj.nodes || []).filter(n => n && SH[n.type] && isFinite(n.x) && isFinite(n.y))
-    .map(n => { const o = Object.assign({}, defaults(n.type), n); o.id = String(o.id || rid('n')); if (o.dash === true) o.dash = 'dash'; if (o.type === 'pool' && !Array.isArray(o.lanes)) o.lanes = ['Lane']; if ('glow' in o && !isHex(o.glow)) delete o.glow; cleanAlign(o); if (o.group !== undefined && !/^[A-Za-z0-9_-]{1,40}$/.test(String(o.group))) delete o.group; return o; });
+    .map(n => { const o = Object.assign({}, defaults(n.type), n); o.id = String(o.id || rid('n')); if (o.dash === true) o.dash = 'dash'; if (o.type === 'pool' && !Array.isArray(o.lanes)) o.lanes = ['Lane']; if ('glow' in o && !isHex(o.glow)) delete o.glow; if ('src' in o && !PIC_RE.test(String(o.src))) delete o.src; if ('ratio' in o && !(+o.ratio > 0 && +o.ratio < 100)) delete o.ratio; cleanAlign(o); if (o.group !== undefined && !/^[A-Za-z0-9_-]{1,40}$/.test(String(o.group))) delete o.group; return o; });
   const ids = new Set(nodes.map(n => n.id));
   const okPt = q => q && isFinite(q.x) && isFinite(q.y);
   const edges = (obj.edges || []).filter(e => e && (ids.has(e.from) || okPt(e.p1)) && (ids.has(e.to) || okPt(e.p2)))
@@ -1883,6 +1937,7 @@ function nodeAt(p, exclude) {
 function addNode(key, at) {
   const pr = typeof key === 'string' ? PRESETS[key] : key; if (!pr) return;
   if (pr.grp) { insertGroup(pr.grp, at); return; }
+  if (pr.type === 'image' && !(pr.props && pr.props.src)) { pickPicture(at); return; }
   if (pr.free) { addFreeArrow(at); return; }
   if (!SH[pr.type]) return;
   const base = !at && ui.smart && sel.nodes.size === 1 && !sel.edges.size ? byId[[...sel.nodes][0]] : null;
@@ -2409,6 +2464,14 @@ window.addEventListener('pointermove', ev => {
         if (hd.includes('s')) { const hh = Math.max(MIN / 2, B - cy); T = cy - hh; B = cy + hh; }
         if (hd.includes('n')) { const hh = Math.max(MIN / 2, cy - T); T = cy - hh; B = cy + hh; }
       }
+      if (n.type === 'image' && n.ratio > 0 && !ev.shiftKey) {   // pictures keep their proportions; Shift resizes freely
+        let w2 = R - L, h2 = B - T;
+        if (hd === 'n' || hd === 's') w2 = h2 * n.ratio; else h2 = w2 / n.ratio;
+        if (hd.includes('w')) L = R - w2; else R = L + w2;
+        if (hd.includes('n')) T = B - h2; else B = T + h2;
+        if (hd === 'n' || hd === 's') { const cx = o.x + o.w / 2; L = cx - w2 / 2; R = cx + w2 / 2; }
+        if (hd === 'e' || hd === 'w') { const cy = o.y + o.h / 2; T = cy - h2 / 2; B = cy + h2 / 2; }
+      }
       n.x = L; n.y = T; n.w = R - L; n.h = B - T; drag.moved = true;
       renderScene(); renderOverlay(); break;
     }
@@ -2546,7 +2609,7 @@ stage.addEventListener('dragover', ev => { ev.preventDefault(); stage.classList.
 stage.addEventListener('dragleave', () => stage.classList.remove('dropping'));
 stage.addEventListener('drop', ev => {
   ev.preventDefault(); stage.classList.remove('dropping');
-  if (ev.dataTransfer.files && ev.dataTransfer.files.length) { readFile(ev.dataTransfer.files[0]); return; }
+  if (ev.dataTransfer.files && ev.dataTransfer.files.length) { const fs = [...ev.dataTransfer.files]; if (fs.some(f => /^image\//.test(f.type))) { addPictures(fs, toWorld(ev)); return; } readFile(fs[0]); return; }
   const key = ev.dataTransfer.getData('text/plain');
   if (key === 'free-arrow') addFreeArrow(toWorld(ev));
   else if (key.startsWith('fav:')) { const pr = presetFromKey(key); if (pr) addNode(pr, toWorld(ev)); }
@@ -2583,7 +2646,7 @@ window.addEventListener('keydown', ev => {
   if (mod && key === 'y') { ev.preventDefault(); redo(); return; }
   if (mod && key === 'c') { copySel(); return; }
   if (mod && key === 'x') { if (copySel()) deleteSel(); return; }
-  if (mod && key === 'v') { if (cmtMode) return; ev.preventDefault(); paste(); return; }
+  if (mod && key === 'v') return;   // handled by the paste event: pictures from the clipboard, or sUML objects
   if (mod && key === 'd') { ev.preventDefault(); duplicate(); return; }
   if (mod && key === 'g') { ev.preventDefault(); ev.shiftKey ? ungroupSel() : groupSel(); return; }
   if (mod && key === 'a') { ev.preventDefault(); clearSel(); doc.nodes.forEach(n => sel.nodes.add(n.id)); doc.edges.forEach(e => sel.edges.add(e.id)); if (!ui.inkHidden) (doc.ink || []).forEach(k => sel.ink.add(k.id)); renderOverlay(); renderPanel(); return; }
@@ -2776,6 +2839,14 @@ function nodePanel(ns) {
         row('Orientation', bind(el('select', {}, el('option', { value: 'h' }, 'Horizontal lanes (rows)'), el('option', { value: 'v' }, 'Vertical lanes (columns)')), ns, 'orient')));
     } else if (!d.noText) s1.append(row('Text', bind(ta(3), ns, 'text')));
     if (one.type === 'datastore') s1.append(row('ID', bind(inp(), ns, 'tag')));
+    if (one.type === 'image') {
+      const fr = el('input', { type: 'checkbox' }); fr.checked = !!one.border;
+      fr.onchange = () => { pushUndo(); one.border = fr.checked; renderScene(); scheduleSave(); };
+      s1.append(el('div', { class: 'btns' }, btn('🖼 Replace picture…', () => { replaceTarget = one.id; $('#picIn').value = ''; $('#picIn').click(); }),
+        btn('↺ Original proportions', () => { if (!(one.ratio > 0)) return; pushUndo(); one.h = Math.round(one.w / one.ratio); renderAll(); scheduleSave(); })),
+        el('label', { class: 'fld cb', style: 'margin-top:6px' }, fr, el('span', {}, 'Frame around the picture')),
+        el('p', { class: 'pnote', style: 'margin:4px 0 0' }, 'Corners keep the proportions; hold Shift to stretch. Ctrl+C copies the picture so you can paste it into other apps too.'));
+    }
   }
   if (ns.some(n => !SH[n.type].noText)) s1.append(row('Font size', bind(inp('number'), ns, 'fs', { parse: num(8, 48) })));
   { const ta = ns.filter(n => TXT_ALIGN_OK(n.type)); if (ta.length) s1.append(row('Text position', alignPicker(ta, ta.length < ns.length ? 'Applies to shapes with a plain text box' : 'Top / Mid / Bottom × Left / Center / Right'))); }
@@ -2861,6 +2932,7 @@ function helpContent() {
     <p><b>Layers</b> — set a layer (0–1000) for the selection in this panel. The Layers panel lists used layers; click one to select everything on it.</p>
     <p><b>Tabs</b> — each tab is a separate diagram. A dot means it hasn't been exported to a file yet.</p>
     <p><b>Shortcuts</b> (top right) — drag shapes or actions (Draw line, Comment mode, Highlight, Clear highlights) onto <kbd>Ctrl</kbd>/<kbd>Alt</kbd> + <kbd>1</kbd>–<kbd>0</kbd>, <kbd>Q</kbd>–<kbd>T</kbd> slots, then press the keys.</p>
+    <p><b>Pictures</b> — paste a screenshot with <kbd>Ctrl</kbd>+<kbd>V</kbd> (Snipping Tool, Win+Shift+S, Print Screen), drop an image file on the canvas, or use <i>Picture</i> in the General shapes. Pictures are kept up to 1000 px; corners keep the proportions (Shift stretches). <kbd>Ctrl</kbd>+<kbd>C</kbd> / <kbd>Ctrl</kbd>+<kbd>V</kbd> copy them inside sUML and to other apps.</p>
     <p><b>Groups</b> — select several objects → <kbd>Ctrl</kbd>+<kbd>G</kbd> (or right-click → Group). Click any member to select the whole group; <kbd>Alt</kbd>+click picks one member; <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd> ungroups. Right-click → <i>Add to Favorites as a group</i> keeps it in the Shapes panel. <b>Text position</b> (Properties) places a shape's text or a line's label: Top / Mid / Bottom × Left / Center / Right.</p>
     <p><b>Path lines</b> (⟿ Path in the top bar) — trace a route through the diagram: ＋ New path line, then click objects in order (Enter to finish). Each path line can hold several scenarios, each with its own effect (Running, Highlight, Blink), theme, tone (Vivid / Soft / Muted), direction and speed. Objects on the route light up in the same colours.</p>
     <p><b>Highlight</b> — right-click shapes or lines → pick a highlight colour; right-click the canvas → Clear all highlights. <b>Snap</b> puts shapes on the grid dots. Double-click a picture in a comment to zoom it.</p>
@@ -3117,7 +3189,7 @@ function themeBlock() {
   for (const [k, t] of Object.entries(THEMES)) {
     const shape = t.fill['#ffffff'] || '#ffffff', stroke = t.stroke['#3b4252'] || '#3b4252', edge = t.edge || INK;
     g.append(el('button', { class: 'thcard' + (ui.theme === k ? ' on' : ''), type: 'button', onclick: () => setTheme(k), html:
-      `<div class="prev" style="background:${t.bg}"><i style="left:0;top:0;right:0;height:9px;background:${t.chrome};border-radius:0"></i><i style="left:8px;top:18px;width:30px;height:16px;background:${shape};border:1.5px solid ${stroke}"></i><i style="left:40px;top:25px;width:22px;height:1.5px;background:${edge}"></i><i style="left:64px;top:18px;width:30px;height:16px;background:${shape};border:1.5px solid ${stroke}"></i><i style="right:8px;top:2px;width:22px;height:5px;background:${t.acc}"></i></div><b>${t.name}</b><div class="pnote" style="margin:0">${t.note}</div>` }));
+      `<div class="prev" style="background:${t.bg}"><i style="left:0;top:0;right:0;height:6px;background:${t.chrome};border-radius:0"></i><i style="left:8%;top:12px;width:30%;height:11px;background:${shape};border:1.2px solid ${stroke}"></i><i style="left:38%;top:17px;width:24%;height:1.2px;background:${edge}"></i><i style="left:62%;top:12px;width:30%;height:11px;background:${shape};border:1.2px solid ${stroke}"></i><i style="right:6%;top:1px;width:22%;height:4px;background:${t.acc}"></i></div><b>${t.name.replace(' Night', '')}</b>`, title: `${t.name} — ${t.note}` }));
   }
   pop.append(g);
   const mk = (val, lab) => { const r = el('input', { type: 'radio', name: 'expmode' }); r.checked = !!ui.exportTheme === val; r.addEventListener('change', () => { ui.exportTheme = val; applyUi(); }); return el('label', { class: 'fld cb' }, r, el('span', {}, lab)); };
@@ -3587,11 +3659,11 @@ function cmtPanel(c) {
     btn('Remove comment', () => removeComment(c.id), 'danger')));
 }
 let imgTarget = null;
-function shrinkImage(file) {
+function shrinkImage(file, MAXPX = 1000) {
   return new Promise((res, rej) => {
     const url = URL.createObjectURL(file), im = new Image();
     im.onload = () => {
-      const MAX = 1000, sc = Math.min(1, MAX / Math.max(im.naturalWidth, im.naturalHeight));
+      const MAX = MAXPX, sc = Math.min(1, MAX / Math.max(im.naturalWidth, im.naturalHeight));
       const w = Math.max(1, Math.round(im.naturalWidth * sc)), h = Math.max(1, Math.round(im.naturalHeight * sc));
       const cv = document.createElement('canvas'); cv.width = w; cv.height = h; const ctx = cv.getContext('2d');
       const png = /png|gif|webp/.test(file.type);
@@ -3613,6 +3685,7 @@ async function addImages(c, files) {
   toast(`Added ${out.length} image${out.length > 1 ? 's' : ''} (max 1000 px)`);
 }
 $('#imgIn').addEventListener('change', ev => addImages(cById(imgTarget), ev.target.files));
+$('#picIn').addEventListener('change', ev => addPictures(ev.target.files, picAt));
 document.addEventListener('paste', ev => {
   const tg = ev.target, typing = tg && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA' || tg.isContentEditable);
   const c = cmtMode && selC && cById(selC);
@@ -3623,8 +3696,61 @@ document.addEventListener('paste', ev => {
     createComment({ x: x - 120, y: y - 60, w: 160, h: 80 }); addImages(cById(selC), files); return;
   }
   if (c && files.length) { ev.preventDefault(); addImages(c, files); return; }
-  if (!typing && cmtMode) { ev.preventDefault(); paste(); }
+  if (typing) return;
+  if (cmtMode) { ev.preventDefault(); paste(); return; }
+  ev.preventDefault();
+  const txt = cd ? cd.getData('text/plain') : '';
+  if (clipboard && txt && txt === clipMark) { paste(); return; }        // our own copy is the newest thing on the clipboard
+  if (files.length) { addPictures(files); return; }                     // a screenshot / picture from another app
+  if (clipboard) paste();
 });
+// copy / cut: mark the system clipboard so a later paste knows sUML objects are the newest; a single picture is also copied as an image
+let clipMark = '';
+function onCopyEvent(ev) {
+  const tg = ev.target, typing = tg && (tg.tagName === 'INPUT' || tg.tagName === 'TEXTAREA' || tg.isContentEditable);
+  if (typing || cmtMode || !(sel.nodes.size || sel.edges.size)) return;
+  ev.preventDefault();
+  const ns = selNodes(), es = selEdges();
+  clipMark = `sUML: ${ns.length} object${ns.length === 1 ? '' : 's'}${es.length ? ', ' + es.length + ' line' + (es.length > 1 ? 's' : '') : ''} · ${Date.now()}`;
+  ev.clipboardData.setData('text/plain', clipMark);
+  const pic = ns.length === 1 && !es.length && ns[0].type === 'image' && PIC_RE.test(ns[0].src || '') ? ns[0] : null;
+  if (pic && navigator.clipboard && window.ClipboardItem) {
+    const png = fetch(pic.src).then(r => r.blob()).then(b => b.type === 'image/png' ? b : new Promise(ok => { const im = new Image(); im.onload = () => { const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight; c.getContext('2d').drawImage(im, 0, 0); c.toBlob(ok, 'image/png'); }; im.src = pic.src; }));
+    try { navigator.clipboard.write([new ClipboardItem({ 'image/png': png, 'text/plain': new Blob([clipMark], { type: 'text/plain' }) })]).catch(() => {}); } catch (_) {}
+  }
+}
+document.addEventListener('copy', onCopyEvent);
+document.addEventListener('cut', onCopyEvent);
+/* ---------- pictures on the canvas ---------- */
+let picAt = null, replaceTarget = null;
+function pickPicture(at) { picAt = at || null; replaceTarget = null; $('#picIn').value = ''; $('#picIn').click(); }
+async function addPictures(files, at) {
+  files = [...files].filter(f => /^image\//.test(f.type)); if (!files.length) return;
+  const out = []; for (const f of files) { try { out.push(await shrinkImage(f, 1000)); } catch (_) {} }
+  if (!out.length) { toast('Could not read that picture'); return; }
+  if (replaceTarget && byId[replaceTarget]) {   // Replace picture: keep the place and width, take the new proportions
+    const n = byId[replaceTarget], im = out[0]; replaceTarget = null;
+    pushUndo(); n.src = im.src; n.ratio = +(im.w / im.h).toFixed(4); n.h = Math.round(n.w / n.ratio);
+    renderAll(); scheduleSave(); toast('Picture replaced'); return;
+  }
+  pushUndo(); clearSel();
+  let p = at;
+  if (!p) { const r = freeArea(); p = { x: (r.x + r.width / 2 - view.x) / view.k, y: (r.y + r.height / 2 - view.y) / view.k }; }
+  let y = p.y;
+  for (const im of out) {
+    const k = Math.min(1, 480 / Math.max(im.w, im.h)), w = Math.round(im.w * k), h = Math.round(im.h * k);
+    const n = mk('image', snapV(p.x - (at ? 0 : w / 2)), snapV(y - (at ? 0 : h / 2)), { w, h, src: im.src, ratio: +(im.w / im.h).toFixed(4) });
+    doc.nodes.push(n); sel.nodes.add(n.id); y += h + 20;
+  }
+  renderAll(); scheduleSave(); toast(`Added ${out.length} picture${out.length > 1 ? 's' : ''} (up to 1000 px) · Ctrl+C / Ctrl+V copy it`);
+}
+async function pastePictureFromClipboard(at) {
+  try {
+    const items = await navigator.clipboard.read();
+    for (const it of items) { const t = it.types.find(x => /^image\//.test(x)); if (t) { const b = await it.getType(t); addPictures([new File([b], 'pasted', { type: t })], at); return; } }
+    toast('No picture on the clipboard');
+  } catch (_) { toast('Press Ctrl+V to paste a picture'); }
+}
 
 /* ================= right-click menu ================= */
 function moveLayer(dlt) {
@@ -3654,6 +3780,7 @@ svg.addEventListener('contextmenu', ev => {
     showCtx(ev.clientX, ev.clientY, [
       [n > 1 ? `⧉ Copy ${n} objects` : '⧉ Copy', () => { if (copySel()) toast('Copied'); }],
       ['📋 Paste', clipboard ? () => paste(w) : null],
+      ['🖼 Paste picture', () => pastePictureFromClipboard(w)],
       '-',
       ['⬆ Move layer +1' + lvTxt, () => moveLayer(1)],
       ['⬇ Move layer −1' + lvTxt, () => moveLayer(-1)],
@@ -3673,7 +3800,7 @@ svg.addEventListener('contextmenu', ev => {
         el('div', { class: 'mlab' }, 'Important mark'), (() => { const ns = selNodes(), d = el('div', { class: 'marks' }); d.append(...markRow(ns, mk => { $('#ctxMenu').hidden = true; setMark(ns, mk); }).childNodes); return d; })()] : [])]);
     return;
   }
-  showCtx(ev.clientX, ev.clientY, [['📋 Paste here', clipboard ? () => paste(w) : null], ['💬 Comment here', () => { if (!cmtMode) setCmt(true); createComment({ x: w.x - 80, y: w.y - 40, w: 160, h: 80 }); }],
+  showCtx(ev.clientX, ev.clientY, [['📋 Paste here', clipboard ? () => paste(w) : null], ['🖼 Paste picture here', () => pastePictureFromClipboard(w)], ['🖼 Insert picture…', () => pickPicture(w)], ['💬 Comment here', () => { if (!cmtMode) setCmt(true); createComment({ x: w.x - 80, y: w.y - 40, w: 160, h: 80 }); }],
     ['✕ Clear all highlights', doc.nodes.some(o => o.glow) || doc.edges.some(o => o.glow) ? clearAllGlow : null]]);
 });
 
