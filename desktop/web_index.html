@@ -1852,7 +1852,7 @@ function openText(text, handle, name) {
 async function openFile() {
   if (typeof window.showOpenFilePicker === 'function') {
     try {
-      const [h] = await window.showOpenFilePicker({ types: [{ description: 'sUML diagram', accept: { 'application/json': ['.json', '.suml'] } }, { description: 'UXF diagram', accept: { 'application/xml': ['.uxf'] } }] });
+      const [h] = await window.showOpenFilePicker({ types: [{ description: 'All diagram files (.json, .suml, .uxf)', accept: { 'application/json': ['.json', '.suml'], 'application/xml': ['.uxf'] } }, { description: 'sUML diagram', accept: { 'application/json': ['.json', '.suml'] } }, { description: 'UXF diagram', accept: { 'application/xml': ['.uxf'] } }] });
       const f = await h.getFile(); openText(await f.text(), h, h.name); return;
     } catch (err) { if (err && err.name === 'AbortError') return; }
   }
