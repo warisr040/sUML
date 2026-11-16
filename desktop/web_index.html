@@ -443,7 +443,7 @@ body.barup #toast{bottom:104px}
     <button class="b" id="bSettings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     <button class="b" id="bHelp" title="Help (F1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14M12 17.5h.01"/></svg></button>
     <button class="b" id="bKbd" title="Shortcut menu (Ctrl / Alt + 1–0, Q–T)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg><span class="lbl">Shortcuts</span></button>
-    <input type="file" id="fileIn" accept=".json,.suml,.situml,.uxf,application/json" hidden>
+    <input type="file" id="fileIn" accept=".json,.suml,.uxf,application/json" hidden>
   </header>
   <nav id="tabbar" class="glass"></nav>
 
@@ -1852,7 +1852,7 @@ function openText(text, handle, name) {
 async function openFile() {
   if (typeof window.showOpenFilePicker === 'function') {
     try {
-      const [h] = await window.showOpenFilePicker({ types: [{ description: 'sUML diagram', accept: { 'application/json': ['.json', '.suml', '.situml'] } }, { description: 'Imported diagram', accept: { 'application/xml': ['.uxf'] } }] });
+      const [h] = await window.showOpenFilePicker({ types: [{ description: 'sUML diagram', accept: { 'application/json': ['.json', '.suml'] } }, { description: 'UXF diagram', accept: { 'application/xml': ['.uxf'] } }] });
       const f = await h.getFile(); openText(await f.text(), h, h.name); return;
     } catch (err) { if (err && err.name === 'AbortError') return; }
   }
