@@ -1835,12 +1835,12 @@ async function saveFile(as) {
   markSaved(t, name); toast('Saved ' + name + ' (to your Downloads folder)'); return true;
 }
 function openText(text, handle, name) {
-  if (/^\s*(<\?xml[^>]*>\s*)?<diagram[\s>]/i.test(text)) {   // UMLet (.uxf)
+  if (/^\s*(<\?xml[^>]*>\s*)?<diagram[\s>]/i.test(text)) {   // .uxf diagram
     try {
       const obj = importUxf(text, name);
-      const base = String(name || 'UMLet diagram').replace(/\.uxf$/i, '');
-      openTab(obj).then(t => { if (!t) return; t.fname = base + '.suml.json'; t.dirty = true; renderTabs(); toast(`Imported UMLet diagram “${base}”: ${obj.nodes.length} shapes, ${obj.edges.length} lines${obj._skipped ? ` · ${obj._skipped} items skipped` : ''} · Save to keep it as .suml.json`); });
-    } catch (err) { alert('This UMLet file could not be imported.\n\n' + err.message); }
+      const base = String(name || 'Imported diagram').replace(/\.uxf$/i, '');
+      openTab(obj).then(t => { if (!t) return; t.fname = base + '.suml.json'; t.dirty = true; renderTabs(); toast(`Imported .uxf diagram “${base}”: ${obj.nodes.length} shapes, ${obj.edges.length} lines${obj._skipped ? ` · ${obj._skipped} items skipped` : ''} · Save to keep it as .suml.json`); });
+    } catch (err) { alert('This .uxf file could not be imported.\n\n' + err.message); }
     return;
   }
   try {
@@ -1852,14 +1852,14 @@ function openText(text, handle, name) {
 async function openFile() {
   if (typeof window.showOpenFilePicker === 'function') {
     try {
-      const [h] = await window.showOpenFilePicker({ types: [{ description: 'sUML diagram', accept: { 'application/json': ['.json', '.suml', '.situml'] } }, { description: 'UMLet diagram', accept: { 'application/xml': ['.uxf'] } }] });
+      const [h] = await window.showOpenFilePicker({ types: [{ description: 'sUML diagram', accept: { 'application/json': ['.json', '.suml', '.situml'] } }, { description: 'Imported diagram', accept: { 'application/xml': ['.uxf'] } }] });
       const f = await h.getFile(); openText(await f.text(), h, h.name); return;
     } catch (err) { if (err && err.name === 'AbortError') return; }
   }
   $('#fileIn').click();
 }
-/* ================= UMLet import (.uxf) ================= */
-// UMLet keeps every shape as an <element> with its type, box and "panel attributes" text; lines (Relation) are not tied
+/* ================= .uxf import ================= */
+// A .uxf file keeps every shape as an <element> with its type, box and "panel attributes" text; lines (Relation) are not tied
 // to shapes, so their ends are attached to whichever shape they touch.
 const UXF_COLORS = { red: '#fee2e2', green: '#dcfce7', blue: '#dbeafe', yellow: '#fef9c3', orange: '#ffedd5', gray: '#f3f4f6', grey: '#f3f4f6', white: '#ffffff', black: '#1f2430', pink: '#fce7f3', cyan: '#cffafe', magenta: '#fae8ff', light_gray: '#f3f4f6', dark_gray: '#9ca3af' };
 const UXF_FG = { red: '#dc2626', green: '#16a34a', blue: '#2563eb', black: '#3b4252', gray: '#6b7280', orange: '#ea580c' };
@@ -1867,7 +1867,7 @@ function uxfColor(v, map) { v = String(v || '').trim().toLowerCase(); if (/^#[0-
 function importUxf(text, name) {
   const xml = new DOMParser().parseFromString(text, 'application/xml');
   if (xml.querySelector('parsererror')) throw new Error('The file is not valid XML.');
-  const root = xml.documentElement; if (!root || root.nodeName !== 'diagram') throw new Error('No <diagram> found — is this a UMLet .uxf file?');
+  const root = xml.documentElement; if (!root || root.nodeName !== 'diagram') throw new Error('No <diagram> found — is this a .uxf diagram file?');
   const zoom = +((root.querySelector(':scope > zoom_level') || {}).textContent || 10) || 10, k = 10 / zoom;
   const nodes = [], rels = []; let skipped = 0;
   const txt = (el, tag) => { const t = el.querySelector(':scope > ' + tag); return t ? t.textContent : ''; };
@@ -1946,7 +1946,7 @@ function importUxf(text, name) {
   for (const n of nodes) { n.x = f1(n.x - ox); n.y = f1(n.y - oy); if (n.type === 'frame' || n.type === 'package') n.layer = 0; }
   for (const e of edges) { for (const key of ['p1', 'p2']) if (e[key]) e[key] = { x: f1(e[key].x - ox), y: f1(e[key].y - oy) }; if (e.via) e.via = e.via.map(q => ({ x: f1(q.x - ox), y: f1(q.y - oy) })); }
   nodes.sort((p, q) => (SH[q.type].container ? 1 : 0) - (SH[p.type].container ? 1 : 0) || q.w * q.h - p.w * p.h && 0);   // containers drawn first
-  const title = String(name || 'UMLet diagram').replace(/\.uxf$/i, '');
+  const title = String(name || 'Imported diagram').replace(/\.uxf$/i, '');
   return { title, nodes, edges, ink: [], comments: [], _skipped: skipped };
 }
 function readFile(file) { const r = new FileReader(); r.onload = () => openText(r.result, null, file.name); r.readAsText(file); }
@@ -3153,7 +3153,7 @@ function helpContent() {
     <p><b>Theme</b> (⚙ Settings) — Basic, Dark, Starry Night, Forest or Burning. Themes recolour the app, the canvas and the default shape and line colours; colours you picked yourself stay. Settings also chooses whether Save As PNG / SVG uses a white background or the theme.</p>
     <p><b>View</b> (top bar, beside zoom) — Fit, Grid, Snap and Smart in one menu; a dot on the button shows Smart is on.</p>
     <p><b>Snip</b> (top bar) — like Snipping Tool: drag over part of the canvas (or click once for the whole view) and the picture is copied to the clipboard; save it as PNG or SVG from the card that appears. <b>Save As</b> can also save the whole diagram as a <code>.png</code> or <code>.svg</code> picture.</p>
-    <p><b>Import from UMLet</b> — <b>Open</b> (<kbd>Ctrl</kbd>+<kbd>O</kbd>) or drop a <code>.uxf</code> file on the canvas: it opens in a new tab as a sUML diagram (classes, use cases, actors, notes, packages, states, lines with their arrow types, labels and colours). The .uxf file itself is not changed; Save keeps the result as <code>.suml.json</code>.</p>
+    <p><b>Import .uxf diagrams</b> — <b>Open</b> (<kbd>Ctrl</kbd>+<kbd>O</kbd>) or drop a <code>.uxf</code> file on the canvas: it opens in a new tab as a sUML diagram (classes, use cases, actors, notes, packages, states, lines with their arrow types, labels and colours). The .uxf file itself is not changed; Save keeps the result as <code>.suml.json</code>.</p>
     <p><b>Shapes panel</b> — ⊟ folds or unfolds every section; drag a section title to change the order; right-click a shape → <i>Add to Favorites</i> (right-click a favourite to remove it).</p>
     <p><b>Where new shapes go</b> — a new shape is placed where you last clicked on empty canvas (on the grid); the next one goes below it. With Smart on and a box selected, it goes next to that box instead.</p>
     <p><b>Auto-route</b> — orthogonal lines find their own way around boxes (up to 10 bends). Use joints (<kbd>Ctrl</kbd>+drag) to shape a line by hand.</p>
