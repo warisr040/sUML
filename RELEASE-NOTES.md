@@ -1,6 +1,7 @@
 # sUML (simply handle IT UML) — release notes
 
-## Version 1.6
+## Version 2.0
+sUML 2.0 is the first release since 1.1 and brings together everything in 1.2–1.6 below: Path lines, groups, Snip, pictures, smarter right-angle lines, the new name *simply handle IT UML* and the new icon. New in 2.0 itself:
 - **Avoid crossing lines** (Settings, off by default): right-angle lines go round other lines instead of crossing them.
 - Lines that end at the same point of a box join for the last stretch with a **junction dot** where they meet (Settings → *Spread shared line ends* gives each its own spot instead).
 - Fix: moving boxes that were selected with a drag box no longer moves a line that was only caught by the box (its other end jumped to the far side of the box). A dragged line's ends now stay on their side.
