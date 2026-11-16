@@ -1,4 +1,4 @@
-sUML - simply handle IT UML  version 2.0  (Windows)
+sUML - simply handle IT UML  version 2.1  (Windows)
 
 1. Unzip this file (right-click > Extract All). Don't run it from inside the zip.
 2. Put sUML.exe in a folder you can write to (e.g. Documents\sUML), then double-click it.
@@ -7,7 +7,8 @@ sUML - simply handle IT UML  version 2.0  (Windows)
 
 Saving
 - Save (Ctrl+S) / Save As (Ctrl+Shift+S) write an editable .suml.json file where you choose.
-- SVG / PNG export pictures of the diagram.
+- Save As can also save the whole diagram as a .png or .svg picture; Snip copies part of it.
+- Open (Ctrl+O) also imports UMLet .uxf diagrams.
 - Open diagrams (tabs) are also autosaved in %LOCALAPPDATA%\sUML.
 
 Settings and shortcut assignments are saved in ONE file next to the exe:
@@ -15,4 +16,4 @@ Settings and shortcut assignments are saved in ONE file next to the exe:
 
 Nothing is uploaded - the app works fully offline.
 Needs Microsoft Edge WebView2 Runtime - already built into Windows 10/11.
-Press F1 inside the app for help.
+Press F1 inside the app for help, or open sUML-User-Manual.html (in this folder) in your browser.
