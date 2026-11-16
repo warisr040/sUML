@@ -1,7 +1,19 @@
 # sUML (simply handle IT UML) — release notes
 
 ## Version 2.1
-- **Import .uxf diagrams**: Open (Ctrl+O) or drop a `.uxf` file on the canvas. It opens in a new tab: classes keep their name / attributes / methods, use cases, actors, notes, packages, frames, states, start / end / decision / fork, components and deployment nodes get the matching sUML shape; lines keep their arrow type (inheritance, realization, dependency, aggregation, composition), dashes, labels and end counts (m1 / m2), and their ends are attached to the shape they touch. Colours (bg= / fg=) and text alignment carry over. Sequence and timing diagram elements become plain boxes.
+- **Import .uxf diagrams**: Open (Ctrl+O) or drop a `.uxf` file on the canvas. It opens in a new tab: classes keep their name / attributes / methods; use cases, actors, notes, packages, frames, states, start / end / decision / fork, components and deployment nodes get the matching sUML shape; lines keep their arrow type, dashes, labels and end counts (m1 / m2). Line ends attach where the line meets a box outline — to the small box inside a big one, never to a text box lying over the end. Big shapes that hold others go underneath with their title at the top.
+- **Smart guides** (View → Guides, on by default): while dragging, shapes line up with the edges and centres of other shapes and snap to equal gaps between two neighbours, like PowerPoint. Hold Alt to drag freely.
+- **Snap level** (View): ¼, ½ or 1 grid step. Shift+arrow moves one snap step.
+- **Select mode** (View → Select): Both / Objects / Lines. A tag in the status bar shows the mode; click it to go back to Both.
+- **Arrow keys move lines** like shapes: joints and loose ends move, attached ends slide along their side.
+- **New line tools in Align → Line**:
+  - *Nearest Route*: keeps each line's start; moves its end on the destination — straight toward it when possible, otherwise the shortest route.
+  - *Nearest Object*: attaches loose line ends to the closest shape.
+  - *Line Lanes*: lines between side-by-side (or stacked) boxes become straight, evenly spaced lanes over the whole shared stretch of the sides, lined up along a row of boxes (forward lines first, then the ones going back).
+  - *Straighten Line*: *Follow Head* keeps the arrow-head end and moves the tail; *Follow Tail* keeps the start and moves the head.
+- **Shape type** (Properties): change a shape into another kind, e.g. a Box into a Frame. Frames never take lines (no connection dots; a line end dropped inside goes to the shape underneath) and are clicked only on their border or title.
+- Distribute buttons show their labels on two lines; the Open dialog lists .json, .suml and .uxf together; the old .situml extension is no longer offered.
+- New user manual for 2.x, included in the Windows zip.
 
 ## Version 2.0
 sUML 2.0 is the first release since 1.1 and brings together everything in 1.2–1.6 below: Path lines, groups, Snip, pictures, smarter right-angle lines, the new name *simply handle IT UML* and the new icon. New in 2.0 itself:
