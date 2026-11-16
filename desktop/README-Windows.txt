@@ -8,7 +8,7 @@ sUML - simply handle IT UML  version 2.1  (Windows)
 Saving
 - Save (Ctrl+S) / Save As (Ctrl+Shift+S) write an editable .suml.json file where you choose.
 - Save As can also save the whole diagram as a .png or .svg picture; Snip copies part of it.
-- Open (Ctrl+O) also imports UMLet .uxf diagrams.
+- Open (Ctrl+O) also imports .uxf diagrams from other UML editors.
 - Open diagrams (tabs) are also autosaved in %LOCALAPPDATA%\sUML.
 
 Settings and shortcut assignments are saved in ONE file next to the exe:

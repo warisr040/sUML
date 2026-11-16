@@ -1,7 +1,7 @@
 # sUML (simply handle IT UML) — release notes
 
 ## Version 2.1
-- **Import from UMLet**: Open (Ctrl+O) or drop a `.uxf` file on the canvas. It opens in a new tab: classes keep their name / attributes / methods, use cases, actors, notes, packages, frames, states, start / end / decision / fork, components and deployment nodes get the matching sUML shape; lines keep their arrow type (inheritance, realization, dependency, aggregation, composition), dashes, labels and end counts (m1 / m2), and their ends are attached to the shape they touch. Colours (bg= / fg=) and text alignment carry over. Sequence and timing diagram elements become plain boxes.
+- **Import .uxf diagrams**: Open (Ctrl+O) or drop a `.uxf` file on the canvas. It opens in a new tab: classes keep their name / attributes / methods, use cases, actors, notes, packages, frames, states, start / end / decision / fork, components and deployment nodes get the matching sUML shape; lines keep their arrow type (inheritance, realization, dependency, aggregation, composition), dashes, labels and end counts (m1 / m2), and their ends are attached to the shape they touch. Colours (bg= / fg=) and text alignment carry over. Sequence and timing diagram elements become plain boxes.
 
 ## Version 2.0
 sUML 2.0 is the first release since 1.1 and brings together everything in 1.2–1.6 below: Path lines, groups, Snip, pictures, smarter right-angle lines, the new name *simply handle IT UML* and the new icon. New in 2.0 itself:
