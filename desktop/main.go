@@ -1,4 +1,4 @@
-// smart UML (sUML) desktop — wraps the offline index.html in a native Windows window (WebView2).
+// simply handle IT UML (sUML) desktop — wraps the offline index.html in a native Windows window (WebView2).
 // The page is served only on the loopback interface (127.0.0.1); nothing is sent to the internet.
 package main
 
@@ -99,7 +99,7 @@ func main() {
 		AutoFocus: true,
 		DataPath:  dataDir,
 		WindowOptions: webview2.WindowOptions{
-			Title:  "smart UML (sUML) 1.1",
+			Title:  "simply handle IT UML (sUML) 1.6",
 			Width:  1440,
 			Height: 900,
 			IconId: 2,

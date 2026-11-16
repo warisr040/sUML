@@ -1,4 +1,4 @@
-# Building sUML.exe (smart UML desktop)
+# Building sUML.exe (simply handle IT UML desktop)
 
 The exe is a ~7 MB native Windows window (Microsoft Edge WebView2) around the same `index.html`
 used for the website. It serves the page only on 127.0.0.1 — nothing goes to the internet.
