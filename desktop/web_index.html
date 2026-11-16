@@ -129,8 +129,11 @@ details.sec.dragging{opacity:.4}
 details.sec.dropbefore{box-shadow:inset 0 2px 0 var(--accent)}
 details.sec.dropafter{box-shadow:inset 0 -2px 0 var(--accent)}
 #smartOpt{position:absolute;z-index:7;padding:12px 14px;width:300px}
-#viewPop{position:absolute;z-index:7;padding:10px 12px 12px;width:250px;display:flex;flex-direction:column;gap:4px}
+#viewPop{position:absolute;z-index:7;padding:10px 12px 12px;width:272px;display:flex;flex-direction:column;gap:4px}
 #viewPop .phead{margin-bottom:2px}
+body.sel-obj #scene [data-eid]{pointer-events:none}body.sel-line #scene [data-id]{pointer-events:none}
+#selTag{background:var(--accent);color:#fff;border-radius:999px;padding:1px 8px;font-size:11px;font-weight:600;margin-right:6px;cursor:pointer}
+.snaplv{display:flex;align-items:center;gap:4px;padding:0 4px 4px 36px;font-size:11px;color:var(--muted)}.snaplv span{flex:1;white-space:nowrap}.snaplv button{white-space:nowrap;border:1px solid var(--line);background:transparent;border-radius:7px;padding:3px 6px;font-size:11px;color:var(--text);cursor:pointer}.snaplv button.on{background:var(--accent);border-color:var(--accent);color:#fff}
 #viewPop>.b{display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:8px;width:100%;text-align:left;height:auto;padding:8px 10px;border-radius:10px}
 #viewPop>.b svg{width:18px;height:18px}
 #viewPop>.b .lbl{display:inline!important}
@@ -482,6 +485,7 @@ body.barup #toast{bottom:104px}
   <div id="viewPop" class="glass" hidden><div class="phead"><b>View</b><button class="foldbtn" type="button" id="viewX" title="Close">×</button></div>      <button class="b" id="bFit" title="Fit diagram to screen">Fit</button>
       <button class="b on" id="bGrid" title="Show grid">Grid</button>
       <button class="b on" id="bSnap" title="Snap to grid">Snap</button>
+      <button class="b on" id="bGuides" title="Smart guides">Guides</button>
       <button class="b" id="bSmart" title="Smart action: select a box to see its connections; adding a shape places it next to the box and connects it"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg><span class="lbl">Smart</span></button></div>
   <div id="snipBar" class="glass" hidden></div>
   <div id="snipCard" class="glass" hidden></div>
@@ -489,7 +493,7 @@ body.barup #toast{bottom:104px}
 
   <footer class="glass">
     <span id="stInfo"></span>
-    <span id="stHint">Hover a shape and drag a dot to connect · Shift+drag a shape or line to detach · Double-click to edit text</span>
+    <span id="selTag" hidden></span><span id="stHint">Hover a shape and drag a dot to connect · Shift+drag a shape or line to detach · Double-click to edit text</span>
     <span class="spacer"></span>
     <span class="ok" title="No data is ever sent anywhere. Your work is kept in this browser's local storage until you export it.">● Offline · nothing is uploaded · autosaved locally</span>
   </footer>
@@ -514,7 +518,8 @@ const rid = p => p + Math.random().toString(36).slice(2, 10);
 const clone = o => JSON.parse(JSON.stringify(o));
 const isHex = v => /^#[0-9a-f]{6}$/i.test(v || '');
 const DOT = GRID * 2; // the visible grid dots are DOT apart (see applyView); Snap puts things on them
-const snapV = v => Math.round(v / DOT) * DOT;
+const snapStep = () => DOT * ([.25, .5, 1].includes(+ui.snapStep) ? +ui.snapStep : 1);   // Snap level: ¼, ½ or 1 grid
+const snapV = v => { const st = snapStep(); return Math.round(v / st) * st; };
 
 const mctx = document.createElement('canvas').getContext('2d');
 function textW(t, fs, bold) { mctx.font = (bold ? 'bold ' : '') + fs + 'px ' + FONT; return mctx.measureText(t).width; }
@@ -1591,7 +1596,7 @@ function renderOverlay() {
     }
   }
   const pid = !drag && !editing && !penMode ? hoverId : null, pn = pid && byId[pid];
-  if (pn) {
+  if (pn && LINKABLE(pn)) {
     const o = 16 / k, c = ctr(pn);
     for (const [px, py, sd] of [[c.x, pn.y - o, 'top'], [pn.x + pn.w + o, c.y, 'right'], [c.x, pn.y + pn.h + o, 'bottom'], [pn.x - o, c.y, 'left']]) {
       s += `<g data-port="${pn.id}" data-side="${sd}" style="cursor:crosshair"><circle cx="${px}" cy="${py}" r="${9 / k}" fill="transparent"/><circle cx="${px}" cy="${py}" r="${5 / k}" fill="#dbe7ff" stroke="${ACC}" stroke-width="${sw}"/><title>Drag to another shape to connect</title></g>`;
@@ -1634,6 +1639,15 @@ function renderOverlay() {
   else if (snipMode) { const v = viewWorld(); s += `<rect x="${v.x}" y="${v.y}" width="${v.w}" height="${v.h}" fill="#0f172a" fill-opacity=".14" pointer-events="none"/>`; }
   if (drag && drag.mode === 'carea') { const r = rectOf(drag.start, drag.cur); s += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="4" fill="#fde047" fill-opacity=".25" stroke="#f59e0b" stroke-width="${2 / k}" stroke-dasharray="${7 / k} ${4 / k}" pointer-events="none"/>`; }
   if (drag && drag.mode === 'cink' && drag.pts.length) s += `<path d="${inkPath(drag.pts)}" fill="none" stroke="${cpen.color}" stroke-width="${cpen.width}" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>`;
+  if (drag && drag.mode === 'move' && drag.guides && drag.guides.length) {   // smart guides (PowerPoint-style)
+    const GC = '#e11d48', sw = 1 / k;
+    for (const g of drag.guides) {
+      if (g.gap) { s += `<g pointer-events="none" stroke="${GC}" stroke-width="${sw}"><line x1="${g.x1}" y1="${g.y1}" x2="${g.x2}" y2="${g.y2}"/>` +
+        (g.x1 === g.x2 ? `<path d="M${g.x1 - 4 / k} ${g.y1 + 5 / k}L${g.x1} ${g.y1}L${g.x1 + 4 / k} ${g.y1 + 5 / k}M${g.x2 - 4 / k} ${g.y2 - 5 / k}L${g.x2} ${g.y2}L${g.x2 + 4 / k} ${g.y2 - 5 / k}" fill="none"/>`
+          : `<path d="M${g.x1 + 5 / k} ${g.y1 - 4 / k}L${g.x1} ${g.y1}L${g.x1 + 5 / k} ${g.y1 + 4 / k}M${g.x2 - 5 / k} ${g.y2 - 4 / k}L${g.x2} ${g.y2}L${g.x2 - 5 / k} ${g.y2 + 4 / k}" fill="none"/>`) + '</g>'; continue; }
+      s += `<line x1="${g.x1}" y1="${g.y1}" x2="${g.x2}" y2="${g.y2}" stroke="${GC}" stroke-width="${sw}" stroke-dasharray="${4 / k} ${3 / k}" pointer-events="none"/>`;
+    }
+  }
   if (drag && drag.mode === 'marquee') {
     const r = rectOf(drag.start, drag.cur);
     s += `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" fill="${ACC}" fill-opacity=".07" stroke="${ACC}" stroke-width="${1 / k}" pointer-events="none"/>`;
@@ -1864,6 +1878,30 @@ async function openFile() {
 const UXF_COLORS = { red: '#fee2e2', green: '#dcfce7', blue: '#dbeafe', yellow: '#fef9c3', orange: '#ffedd5', gray: '#f3f4f6', grey: '#f3f4f6', white: '#ffffff', black: '#1f2430', pink: '#fce7f3', cyan: '#cffafe', magenta: '#fae8ff', light_gray: '#f3f4f6', dark_gray: '#9ca3af' };
 const UXF_FG = { red: '#dc2626', green: '#16a34a', blue: '#2563eb', black: '#3b4252', gray: '#6b7280', orange: '#ea580c' };
 function uxfColor(v, map) { v = String(v || '').trim().toLowerCase(); if (/^#[0-9a-f]{6}$/.test(v)) return v; return map[v] || null; }
+// Where the segment P → Q (Q = the line end) meets box n's outline. P outside the box: where the segment enters it.
+// Otherwise (both inside) the outline point next to Q on the side facing P.
+function segEntry(n, P, Q) {
+  let t0 = 0, t1 = 1; const dx = Q.x - P.x, dy = Q.y - P.y;
+  for (const [pp, qq] of [[-dx, P.x - n.x], [dx, n.x + n.w - P.x], [-dy, P.y - n.y], [dy, n.y + n.h - P.y]]) {
+    if (Math.abs(pp) < 1e-9) { if (qq < 0) return null; continue; }
+    const r = qq / pp; if (pp < 0) t0 = Math.max(t0, r); else t1 = Math.min(t1, r);
+  }
+  return t0 <= t1 ? { x: P.x + t0 * dx, y: P.y + t0 * dy } : null;
+}
+function uxfMeet(n, P, Q) {
+  const inB = p => p.x >= n.x && p.x <= n.x + n.w && p.y >= n.y && p.y <= n.y + n.h, cl = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  if (P && !inB(P)) {
+    const hit = segEntry(n, P, Q); if (hit) return hit;
+    // the line stops just short of the box: carry on along its direction for a few pixels
+    const dx = Q.x - P.x, dy = Q.y - P.y, L = Math.hypot(dx, dy) || 1;
+    const h2 = segEntry(n, Q, { x: Q.x + dx / L * 14, y: Q.y + dy / L * 14 }); if (h2) return h2;
+    return projectToBox(n, Q);
+  }
+  if (!P) return projectToBox(n, Q);
+  const sd = autoSide(n, P);
+  return sd === 'left' ? { x: n.x, y: cl(Q.y, n.y, n.y + n.h) } : sd === 'right' ? { x: n.x + n.w, y: cl(Q.y, n.y, n.y + n.h) }
+    : sd === 'top' ? { x: cl(Q.x, n.x, n.x + n.w), y: n.y } : { x: cl(Q.x, n.x, n.x + n.w), y: n.y + n.h };
+}
 function importUxf(text, name) {
   const xml = new DOMParser().parseFromString(text, 'application/xml');
   if (xml.querySelector('parsererror')) throw new Error('The file is not valid XML.');
@@ -1915,14 +1953,23 @@ function importUxf(text, name) {
   // relations: points are relative to the relation's own box; the first point is the start
   const HEAD = s => { const t = s.replace(/[-.]/g, ''); if (!t) return 'none'; const n = (t.match(/[<>]/g) || []).length;
     return n >= 5 ? 'diamondFilled' : n === 4 ? 'diamond' : n === 3 ? 'arrow' : n === 2 ? 'triangle' : n === 1 ? 'open' : 'none'; };
-  const near = q => {   // the smallest shape whose outline is within reach of the point
+  // A line end belongs to the shape whose OUTLINE is closest to it. Distance is measured to the outline, also from inside:
+  // an end on a small box that sits inside a big box (package, frame, big class) is far from the big box's outline,
+  // so it attaches to the small box. (Measuring "0 when inside" let the big outer box win every time.)
+  const near = q => {
     let best = null, bd = Infinity;
-    for (const n of nodes) { if (n.type === 'frame') continue;
-      const dx = Math.max(n.x - q.x, 0, q.x - n.x - n.w), dy = Math.max(n.y - q.y, 0, q.y - n.y - n.h), d = Math.hypot(dx, dy);
-      if (d <= 12 && (d < bd - .1 || (Math.abs(d - bd) <= .1 && best && n.w * n.h < best.w * best.h))) { best = n; bd = d; } }
+    for (const n of nodes) {
+      if (!LINKABLE(n) || n.type === 'text') continue;   // text boxes (labels lying over a line) never take a line end
+      const inside = q.x >= n.x && q.x <= n.x + n.w && q.y >= n.y && q.y <= n.y + n.h;
+      const d = inside ? Math.min(q.x - n.x, n.x + n.w - q.x, q.y - n.y, n.y + n.h - q.y)
+        : Math.hypot(Math.max(n.x - q.x, 0, q.x - n.x - n.w), Math.max(n.y - q.y, 0, q.y - n.y - n.h));
+      if (d > 12) continue;
+      if (d < bd - 1 || (Math.abs(d - bd) <= 1 && best && n.w * n.h < best.w * best.h)) { best = n; bd = d; }
+    }
     if (best) return best;
-    for (const n of nodes) if (n.type === 'frame') { const dx = Math.min(Math.abs(q.x - n.x), Math.abs(q.x - n.x - n.w)), dy = Math.min(Math.abs(q.y - n.y), Math.abs(q.y - n.y - n.h)); if ((dx <= 8 && q.y >= n.y - 8 && q.y <= n.y + n.h + 8) || (dy <= 8 && q.x >= n.x - 8 && q.x <= n.x + n.w + 8)) return n; }
-    return null;
+    // no outline close by: the end sits well inside a shape (e.g. the middle of an actor) → the smallest shape around it
+    for (const n of nodes) if (LINKABLE(n) && n.type !== 'text' && q.x >= n.x && q.x <= n.x + n.w && q.y >= n.y && q.y <= n.y + n.h && (!best || n.w * n.h < best.w * best.h)) best = n;
+    return best;
   };
   const edges = [];
   for (const r of rels) {
@@ -1933,8 +1980,10 @@ function importUxf(text, name) {
     const tail = HEAD(m[1]), head = HEAD(m[3]), dash = /\.\./.test(m[2]) ? 'dot' : /\./.test(m[2]) ? 'dash' : false;
     const a = near(pts[0]), b = near(pts[pts.length - 1]);
     const e = { id: rid('e'), from: a ? a.id : null, to: b ? b.id : null, route: 'straight', head, tail, dash, label: '' };
-    if (a) { const q = projectToBox(a, pts[0]); e.fromSide = 'pt'; e.fromAt = { u: +((q.x - a.x) / a.w).toFixed(4), v: +((q.y - a.y) / a.h).toFixed(4) }; } else e.p1 = pts[0];
-    if (b) { const q = projectToBox(b, pts[pts.length - 1]); e.toSide = 'pt'; e.toAt = { u: +((q.x - b.x) / b.w).toFixed(4), v: +((q.y - b.y) / b.h).toFixed(4) }; } else e.p2 = pts[pts.length - 1];
+    // attach where the line actually meets the outline, coming from its neighbouring point — not simply the nearest side
+    // (an end drawn a little inside a box could otherwise land on the far side of it)
+    if (a) { const q = uxfMeet(a, pts[1], pts[0]); e.fromSide = 'pt'; e.fromAt = { u: +((q.x - a.x) / a.w).toFixed(4), v: +((q.y - a.y) / a.h).toFixed(4) }; } else e.p1 = pts[0];
+    if (b) { const q = uxfMeet(b, pts[pts.length - 2], pts[pts.length - 1]); e.toSide = 'pt'; e.toAt = { u: +((q.x - b.x) / b.w).toFixed(4), v: +((q.y - b.y) / b.h).toFixed(4) }; } else e.p2 = pts[pts.length - 1];
     if (pts.length > 2) e.via = pts.slice(1, -1);
     const ends = [r.set.m1 || r.set.r1, r.set.m2 || r.set.r2].map(x => (x || '').trim());
     e.label = [r.label, ends[0] || ends[1] ? `${ends[0] || '·'} … ${ends[1] || '·'}` : ''].filter(Boolean).join('\n');
@@ -1945,7 +1994,9 @@ function importUxf(text, name) {
   const xs = nodes.map(n => n.x), ys = nodes.map(n => n.y), ox = xs.length ? Math.min(...xs) - 40 : 0, oy = ys.length ? Math.min(...ys) - 40 : 0;
   for (const n of nodes) { n.x = f1(n.x - ox); n.y = f1(n.y - oy); if (n.type === 'frame' || n.type === 'package') n.layer = 0; }
   for (const e of edges) { for (const key of ['p1', 'p2']) if (e[key]) e[key] = { x: f1(e[key].x - ox), y: f1(e[key].y - oy) }; if (e.via) e.via = e.via.map(q => ({ x: f1(q.x - ox), y: f1(q.y - oy) })); }
-  nodes.sort((p, q) => (SH[q.type].container ? 1 : 0) - (SH[p.type].container ? 1 : 0) || q.w * q.h - p.w * p.h && 0);   // containers drawn first
+  nodes.sort((p, q) => q.w * q.h - p.w * p.h);   // big shapes first (underneath), so shapes placed inside a big one stay visible
+  for (const n of nodes) if (!n.va && !SH[n.type].container && ['rect', 'round', 'note', 'ellipse'].includes(n.type)
+    && nodes.some(o => o !== n && o.x >= n.x && o.y >= n.y && o.x + o.w <= n.x + n.w && o.y + o.h <= n.y + n.h)) n.va = 't';   // its title stays readable above the shapes inside
   const title = String(name || 'Imported diagram').replace(/\.uxf$/i, '');
   return { title, nodes, edges, ink: [], comments: [], _skipped: skipped };
 }
@@ -2039,20 +2090,44 @@ async function snipSave(kind) {
 $('#bSnip').onclick = () => setSnip(!snipMode);
 
 /* ================= view menu: Fit, Grid, Snap, Smart ================= */
+function markSnapLv() { const st = [.25, .5, 1].includes(+ui.snapStep) ? +ui.snapStep : 1; document.querySelectorAll('.snaplv button').forEach(b => b.classList.toggle('on', +b.dataset.v === st)); }
+// Select mode: Both / Objects only / Lines only. Clicks pass through what can't be selected; box-select and Ctrl+A skip it.
+const SEL_MODES = [['both', 'Both'], ['obj', 'Objects'], ['line', 'Lines']];
+function applySelMode() { const m = ui.selMode || 'both'; if (m === 'obj') sel.edges.clear(); if (m === 'line') { sel.nodes.clear(); sel.ink.clear(); } }
+function markSelMode() {
+  const m = ui.selMode || 'both';
+  document.body.classList.toggle('sel-obj', m === 'obj'); document.body.classList.toggle('sel-line', m === 'line');
+  document.querySelectorAll('.selmode button').forEach(b => b.classList.toggle('on', b.dataset.v === m));
+  const t = $('#selTag'); if (t) { t.hidden = m === 'both'; t.textContent = m === 'obj' ? 'Selecting: objects only' : 'Selecting: lines only'; }
+}
+function setSelMode(m) {
+  ui.selMode = m; applySelMode(); markSelMode(); saveConfig(); renderOverlay(); renderPanel();
+  toast(m === 'obj' ? 'Select mode: objects only — lines can\u2019t be clicked or box-selected' : m === 'line' ? 'Select mode: lines only — shapes can\u2019t be clicked or box-selected' : 'Select mode: objects and lines');
+}
+function markGuides() { const b = $('#bGuides'); if (b) b.classList.toggle('on', ui.guides !== false); }
 function toggleView(force) {
   const pop = $('#viewPop'); pop.hidden = force === undefined ? !pop.hidden : !force;
-  $('#bView').classList.toggle('on', !pop.hidden); if (pop.hidden) return;
-  const r = $('#bView').getBoundingClientRect(); pop.style.left = Math.max(12, Math.min(innerWidth - 262, r.left - 60)) + 'px'; pop.style.top = (r.bottom + 8) + 'px';
+  $('#bView').classList.toggle('on', !pop.hidden); if (pop.hidden) return; markSnapLv(); markGuides(); markSelMode();
+  const r = $('#bView').getBoundingClientRect(); pop.style.left = Math.max(12, Math.min(innerWidth - 284, r.left - 60)) + 'px'; pop.style.top = (r.bottom + 8) + 'px';
 }
 (function initView() {
-  const info = { bFit: ['Fit the diagram to the screen', 'Shift+1'], bGrid: ['Show the grid dots', ''], bSnap: ['Put shapes on the grid dots', ''], bSmart: ['Automatic placing, routing and connecting', ''] };
+  const info = { bFit: ['Fit the diagram to the screen', 'Shift+1'], bGrid: ['Show the grid dots', ''], bSnap: ['Put shapes on the grid dots', ''], bGuides: ['Line up with other shapes while dragging, like PowerPoint (hold Alt to skip)', ''], bSmart: ['Automatic placing, routing and connecting', ''] };
   for (const [id, [txt, key]] of Object.entries(info)) {
     const b = $('#' + id); if (!b) continue;
-    if (!b.querySelector('svg')) b.insertAdjacentHTML('afterbegin', { bFit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>', bGrid: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="6" r="1.6"/><circle cx="12" cy="6" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/><circle cx="6" cy="18" r="1.6"/><circle cx="12" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg>', bSnap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4v7a6 6 0 0 0 12 0V4"/><path d="M6 8h4M14 8h4"/></svg>' }[id] || '');
-    if (!b.querySelector('.lbl')) { const t = [...b.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim()); t.forEach(n => n.remove()); b.insertAdjacentHTML('beforeend', `<span class="lbl">${{ bFit: 'Fit', bGrid: 'Grid', bSnap: 'Snap' }[id]}</span>`); }
+    if (!b.querySelector('svg')) b.insertAdjacentHTML('afterbegin', { bGuides: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="7" height="6" rx="1"/><rect x="13" y="13" width="7" height="6" rx="1"/><path d="M4 3v18M2 16h20" stroke-dasharray="2 2" stroke="#e11d48"/></svg>', bFit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>', bGrid: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="6" cy="6" r="1.6"/><circle cx="12" cy="6" r="1.6"/><circle cx="18" cy="6" r="1.6"/><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/><circle cx="6" cy="18" r="1.6"/><circle cx="12" cy="18" r="1.6"/><circle cx="18" cy="18" r="1.6"/></svg>', bSnap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4v7a6 6 0 0 0 12 0V4"/><path d="M6 8h4M14 8h4"/></svg>' }[id] || '');
+    if (!b.querySelector('.lbl')) { const t = [...b.childNodes].filter(n => n.nodeType === 3 && n.textContent.trim()); t.forEach(n => n.remove()); b.insertAdjacentHTML('beforeend', `<span class="lbl">${{ bFit: 'Fit', bGrid: 'Grid', bSnap: 'Snap', bGuides: 'Guides' }[id]}</span>`); }
     b.insertAdjacentHTML('beforeend', `<span class="st">${key || ''}</span><small>${txt}</small>`);
     if (id !== 'bFit') b.querySelector('.st').classList.add('tg');
   }
+  { // Snap level, right under the Snap switch
+    const row = el('div', { class: 'snaplv', title: 'How fine Snap is: a quarter, half or a whole grid step' }, el('span', {}, 'Snap level'));
+    for (const [v, lab] of [[.25, '¼ grid'], [.5, '½ grid'], [1, '1 grid']]) row.append(el('button', { type: 'button', 'data-v': v, onclick: () => { ui.snapStep = v; markSnapLv(); saveConfig(); toast(`Snap level: ${lab}`); } }, lab));
+    $('#bSnap').after(row); markSnapLv();
+  }
+  { const row = el('div', { class: 'snaplv selmode', title: 'What a click or a box-select picks: objects, lines, or both' }, el('span', {}, 'Select'));
+    for (const [v, lab] of SEL_MODES) row.append(el('button', { type: 'button', 'data-v': v, onclick: () => setSelMode(v) }, lab));
+    $('#viewPop').append(row); $('#selTag').onclick = () => setSelMode('both'); $('#selTag').title = 'Click to select both objects and lines again'; markSelMode(); }
+  $('#bGuides').onclick = () => { ui.guides = ui.guides === false; markGuides(); saveConfig(); toast(ui.guides ? 'Smart guides on — shapes line up with each other while you drag (Alt skips them)' : 'Smart guides off'); };
   $('#bView').onclick = () => toggleView();
   $('#viewX').onclick = () => toggleView(false);
   $('#bFit').addEventListener('click', () => toggleView(false));
@@ -2110,7 +2185,7 @@ function rectOf(a, b) { return { x: Math.min(a.x, b.x), y: Math.min(a.y, b.y), w
 function drawSource(p, exclude) {
   const tol = 10 / view.k, order = renderOrder();
   let n = null;
-  for (let i = order.length - 1; i >= 0; i--) { const o = order[i]; if (o.w > 0 && o.id !== exclude && p.x >= o.x - tol && p.x <= o.x + o.w + tol && p.y >= o.y - tol && p.y <= o.y + o.h + tol) { n = o; break; } }
+  for (let i = order.length - 1; i >= 0; i--) { const o = order[i]; if (o.w > 0 && LINKABLE(o) && o.id !== exclude && p.x >= o.x - tol && p.x <= o.x + o.w + tol && p.y >= o.y - tol && p.y <= o.y + o.h + tol) { n = o; break; } }
   if (!n) return null;
   const inside = p.x >= n.x && p.x <= n.x + n.w && p.y >= n.y && p.y <= n.y + n.h;
   const dEdge = Math.min(Math.abs(p.x - n.x), Math.abs(p.x - n.x - n.w), Math.abs(p.y - n.y), Math.abs(p.y - n.y - n.h));
@@ -2122,6 +2197,14 @@ function drawSource(p, exclude) {
   return { id: n.id, an: { side: 'pt', pt: q, at: { u: +((q.x - n.x) / n.w).toFixed(4), v: +((q.y - n.y) / n.h).toFixed(4) } } };
 }
 let drawHint = null;
+// Frames (boundaries) are only a border around other shapes: lines never attach to them, so a line end dropped
+// inside a frame goes to the shape under it, or stays loose.
+const LINKABLE = n => !!n && n.type !== 'frame';
+function linkNodeAt(p, exclude) {
+  const order = renderOrder();
+  for (let i = order.length - 1; i >= 0; i--) { const n = order[i]; if (LINKABLE(n) && n.id !== exclude && p.x >= n.x && p.x <= n.x + n.w && p.y >= n.y && p.y <= n.y + n.h) return n.id; }
+  return null;
+}
 function nodeAt(p, exclude) {
   const order = renderOrder();
   for (let i = order.length - 1; i >= 0; i--) { const n = order[i]; if (n.id !== exclude && p.x >= n.x && p.x <= n.x + n.w && p.y >= n.y && p.y <= n.y + n.h) return n.id; }
@@ -2387,6 +2470,185 @@ function alignLines(mode) {
   const scope = sel.edges.size ? 'selected' : sel.nodes.size ? 'attached' : 'all';
   toast(`${mode === 'smart' ? 'Auto-routed (ends kept)' : 'Straightened'} ${es.length} ${scope} line${es.length > 1 ? 's' : ''}`);
 }
+// Nearest Route: the START of each line stays exactly where it is; only the END moves on its object.
+// 1st choice: a straight line from the start toward the destination (the start's side faces the object and the object
+// lies in line with it). Otherwise every side of the destination is tried and the shortest, simplest route wins
+// (a route that runs through another object costs extra).
+const SIDES4 = ['top', 'right', 'bottom', 'left'];
+function routeScore(e, pts) {
+  const q = dedupePts(pts.map(p => ({ x: p.x, y: p.y })));
+  let L = 0, hits = 0;
+  for (let i = 1; i < q.length; i++) L += Math.hypot(q[i].x - q[i - 1].x, q[i].y - q[i - 1].y);
+  for (const n of doc.nodes) {
+    if (n.id === e.from || n.id === e.to || !n.w || SH[n.type].container) continue;
+    for (let i = 1; i < q.length; i++) if (segInRect(q[i - 1], q[i], n.x + 1, n.y + 1, n.x + n.w - 1, n.y + n.h - 1)) { hits++; break; }
+  }
+  return hits * 1000 + (q.length - 2) * 40 + L * .05;
+}
+const atOfPt = (n, q) => ({ u: +((q.x - n.x) / n.w).toFixed(4), v: +((q.y - n.y) / n.h).toFixed(4) });
+function straightEnd(a, s0, b) {   // the point on b straight out from the start s0, or null
+  const sd = a ? nearestSide(a, s0) : null, inX = s0.x > b.x + 2 && s0.x < b.x + b.w - 2, inY = s0.y > b.y + 2 && s0.y < b.y + b.h - 2;
+  const ok = d => !sd || sd === d;
+  if (inY && b.x >= s0.x && ok('right')) return { x: b.x, y: s0.y };
+  if (inY && b.x + b.w <= s0.x && ok('left')) return { x: b.x + b.w, y: s0.y };
+  if (inX && b.y >= s0.y && ok('bottom')) return { x: s0.x, y: b.y };
+  if (inX && b.y + b.h <= s0.y && ok('top')) return { x: s0.x, y: b.y + b.h };
+  return null;
+}
+function nearestRoute() {
+  const es = lineTargets().filter(e => e.to && byId[e.to]);
+  if (!es.length) { toast('Select lines (or their boxes) whose end is attached to an object'); return; }
+  pushUndo(); let changed = 0;
+  for (const e of es) {
+    const a = e.from && byId[e.from], b = byId[e.to];
+    if (a && a === b) continue;
+    const pts0 = RENDERED.get(e.id) || edgePoints(e); if (!pts0) continue;
+    const before = JSON.stringify([e.toSide, e.toAt, e.via]), s0 = pts0[0];
+    if (a && a.w && a.h) {   // freeze the start where it is now
+      let side = null; for (const sd of SIDES4) { const c = anchorPt(a, sd); if (Math.hypot(c.x - s0.x, c.y - s0.y) < 1) { side = sd; break; } }
+      setEnd(e, 'from', a.id, side ? { side } : { side: 'pt', at: atOfPt(a, s0) });
+    } else if (!a) e.p1 = { x: f1(s0.x), y: f1(s0.y) };
+    delete e.via;
+    const st = straightEnd(a, s0, b);
+    if (st) { setEnd(e, 'to', b.id, { side: 'pt', at: atOfPt(b, st) }); if (e.route === 'ortho' || !e.route) e.route = 'ortho'; }
+    else {
+      let best = null;
+      for (const t of SIDES4) {
+        setEnd(e, 'to', b.id, { side: t }); ROUTE_CACHE.clear();
+        const pts = edgePoints(e); if (!pts || pts.length < 2) continue;
+        const c = routeScore(e, pts); if (!best || c < best.c - .01) best = { c, t };
+      }
+      if (best) setEnd(e, 'to', b.id, { side: best.t });
+    }
+    if (JSON.stringify([e.toSide, e.toAt, e.via]) !== before) changed++;
+  }
+  ROUTE_CACHE.clear(); renderAll(); scheduleSave();
+  toast(changed ? `Nearest Route: moved the end of ${changed} line${changed > 1 ? 's' : ''} (starts kept)` : 'Nearest Route: the lines already take the nearest route');
+}
+// Line Lanes: lines between boxes that sit side by side (or one above the other) become straight, evenly spaced lanes.
+// Boxes linked in a row share the lanes, so the k-th forward line of every pair is on the same level (same y; same x for
+// stacked boxes). Lines going back (right → left / bottom → top) take the lanes after the forward ones.
+function lineLanes() {
+  const ids = sel.nodes.size ? new Set(sel.nodes) : sel.edges.size ? new Set(selEdges().flatMap(e => [e.from, e.to]).filter(Boolean)) : new Set(doc.nodes.map(n => n.id));
+  const cand = (sel.edges.size ? selEdges() : doc.edges).filter(e => e.from && e.to && e.from !== e.to && ids.has(e.from) && ids.has(e.to) && byId[e.from] && byId[e.to]);
+  const ov = (a0, a1, b0, b1) => Math.min(a1, b1) - Math.max(a0, b0);
+  const groups = { h: [], v: [] };
+  for (const e of cand) {
+    const a = byId[e.from], b = byId[e.to];
+    if (!LINKABLE(a) || !LINKABLE(b)) continue;
+    if ((a.x + a.w <= b.x || b.x + b.w <= a.x) && ov(a.y, a.y + a.h, b.y, b.y + b.h) >= 8) groups.h.push(e);
+    else if ((a.y + a.h <= b.y || b.y + b.h <= a.y) && ov(a.x, a.x + a.w, b.x, b.x + b.w) >= 8) groups.v.push(e);
+  }
+  if (!groups.h.length && !groups.v.length) { toast('Line Lanes: select boxes side by side (or stacked) with lines between them'); return; }
+  pushUndo(); let done = 0;
+  for (const dir of ['h', 'v']) {
+    const H = dir === 'h', P0 = n => H ? n.x : n.y, Q0 = n => H ? n.y : n.x, QL = n => H ? n.h : n.w;
+    // pairs of boxes (first = left / top one)
+    const pairs = new Map();
+    for (const e of groups[dir]) {
+      const a = byId[e.from], b = byId[e.to], first = P0(a) <= P0(b) ? a : b, second = first === a ? b : a, k = first.id + '|' + second.id;
+      if (!pairs.has(k)) pairs.set(k, { first, second, fwd: [], back: [] });
+      (e.from === first.id ? pairs.get(k).fwd : pairs.get(k).back).push(e);
+    }
+    // rows: pairs that share a box
+    const par = new Map(), find = x => { while (par.get(x) !== x) x = par.get(x); return x; };
+    for (const pr of pairs.values()) for (const n of [pr.first, pr.second]) if (!par.has(n.id)) par.set(n.id, n.id);
+    for (const pr of pairs.values()) par.set(find(pr.first.id), find(pr.second.id));
+    const rows = new Map();
+    for (const pr of pairs.values()) { const r = find(pr.first.id); if (!rows.has(r)) rows.set(r, []); rows.get(r).push(pr); }
+    for (const prs of rows.values()) {
+      const mid = e => { const pts = RENDERED.get(e.id) || edgePoints(e); return pts ? (H ? (pts[0].y + pts[pts.length - 1].y) : (pts[0].x + pts[pts.length - 1].x)) / 2 : 0; };
+      for (const pr of prs) { pr.fwd.sort((x, y) => mid(x) - mid(y)); pr.back.sort((x, y) => mid(x) - mid(y)); }
+      const F = Math.max(...prs.map(pr => pr.fwd.length)), B = Math.max(...prs.map(pr => pr.back.length)), N = F + B;
+      // Each pair of boxes uses the whole stretch where their facing sides overlap, split into one equal slot per line
+      // (half a slot of room at both ends, so the lanes run from near the top to near the bottom).
+      // The i-th forward line (and the j-th line going back) of neighbouring pairs share one level when their slots overlap;
+      // otherwise each pair centres it in its own slot. Lanes go on the snap grid only when they stay evenly spaced.
+      const span = pr => [Math.max(Q0(pr.first), Q0(pr.second)), Math.min(Q0(pr.first) + QL(pr.first), Q0(pr.second) + QL(pr.second))];
+      const nOf = pr => pr.fwd.length + pr.back.length;
+      const slotIx = (pr, key) => key < F ? key : pr.fwd.length + key - F;   // key: forward i → i, back j → F + j
+      const slot = (pr, key) => { const [lo, hi] = span(pr), h = (hi - lo) / nOf(pr), i = slotIx(pr, key); return [lo + i * h, lo + (i + 1) * h]; };
+      const laneAt = new Map(prs.map(pr => [pr, []]));
+      for (let key = 0; key < N; key++) {
+        const used = prs.filter(pr => key < F ? key < pr.fwd.length : key - F < pr.back.length).sort((x, y) => P0(x.first) - P0(y.first));
+        for (const pr of used) { const [a, b] = slot(pr, key); laneAt.get(pr)[key] = (a + b) / 2; }
+        let grp = [], lo = -Infinity, hi = Infinity;
+        const flush = () => { if (grp.length > 1) for (const pr of grp) laneAt.get(pr)[key] = (lo + hi) / 2; };
+        for (const pr of used) {
+          const [a, b] = slot(pr, key), nlo = Math.max(lo, a), nhi = Math.min(hi, b);
+          if (grp.length && nhi - nlo >= 1) { grp.push(pr); lo = nlo; hi = nhi; } else { flush(); grp = [pr]; lo = a; hi = b; }
+        }
+        flush();
+      }
+      if (snapOn) {   // try the snap grid: keep it only if every pair stays evenly spaced and inside its sides
+        const snapped = new Map([...laneAt].map(([pr, L]) => [pr, L.map(v => v === undefined ? v : snapV(v))]));
+        const even = [...snapped].every(([pr, L]) => { const [lo, hi] = span(pr), v = L.filter(x => x !== undefined).sort((a, b) => a - b);
+          if (v.some(x => x <= lo + .5 || x >= hi - .5)) return false; for (let i = 2; i < v.length; i++) if (Math.abs((v[i] - v[i - 1]) - (v[1] - v[0])) > .5) return false; return v.every((x, i) => !i || x > v[i - 1]); });
+        if (even) for (const [pr, L] of snapped) laneAt.set(pr, L);
+      }
+      for (const pr of prs) {
+        const L = laneAt.get(pr);
+        const put = (e, lane, fromFirst) => {
+          const s1 = pr.first, s2 = pr.second;
+          const p1 = H ? { x: s1.x + s1.w, y: lane } : { x: lane, y: s1.y + s1.h }, p2 = H ? { x: s2.x, y: lane } : { x: lane, y: s2.y };
+          const [fa, fp, ta, tp] = fromFirst ? [s1, p1, s2, p2] : [s2, p2, s1, p1];
+          setEnd(e, 'from', fa.id, { side: 'pt', at: atOfPt(fa, fp) }); setEnd(e, 'to', ta.id, { side: 'pt', at: atOfPt(ta, tp) });
+          delete e.via; delete e.noAvoid; e.route = 'straight'; done++;
+        };
+        pr.fwd.forEach((e, i) => put(e, L[i], true));
+        pr.back.forEach((e, i) => put(e, L[F + i], false));
+      }
+    }
+  }
+  ROUTE_CACHE.clear(); renderAll(); scheduleSave();
+  toast(`Line Lanes: ${done} line${done > 1 ? 's' : ''} lined up`);
+}
+// Straighten Line: for lines connected at both ends. 'head' keeps the arrow-head end (the end the line goes TO) exactly where it is
+// and moves the tail end on its shape so the line runs straight; 'tail' keeps the start and moves the head end.
+// Straight = level from a left / right side, or plumb from a top / bottom side, toward the other shape.
+function straightenLines(keep) {
+  const es = lineTargets().filter(e => e.from && e.to && e.from !== e.to && byId[e.from] && byId[e.to]);
+  if (!es.length) { toast('Straighten Line: select lines that are connected at both ends'); return; }
+  pushUndo(); let ok = 0, no = 0;
+  for (const e of es) {
+    const pts = RENDERED.get(e.id) || edgePoints(e); if (!pts) continue;
+    const fixEnd = keep === 'head' ? 'to' : 'from', movEnd = fixEnd === 'to' ? 'from' : 'to';
+    const F = byId[e[fixEnd]], M = byId[e[movEnd]], q = fixEnd === 'to' ? pts[pts.length - 1] : pts[0];
+    const target = straightEnd(F, q, M);
+    if (!target) { no++; continue; }
+    setEnd(e, fixEnd, F.id, { side: 'pt', at: atOfPt(F, q) }); setEnd(e, movEnd, M.id, { side: 'pt', at: atOfPt(M, target) });
+    delete e.via; delete e.noAvoid; e.route = 'straight'; ok++;
+  }
+  ROUTE_CACHE.clear(); renderAll(); scheduleSave();
+  toast(`Straighten Line (follow ${keep}): ${ok} straightened` + (no ? ` · ${no} could not be — the shapes are not in line with the ${keep === 'head' ? 'head' : 'tail'} end's side` : ''));
+}
+// Nearest Object: a loose line end is attached to the closest object, at the centre of the side facing it.
+function nearestObject() {
+  const es = lineTargets().filter(e => !e.from || !e.to);
+  if (!es.length) { toast('Nearest Object: no line with a loose end selected'); return; }
+  pushUndo(); let n = 0;
+  for (const e of es) {
+    for (const [end, pk, other] of [['from', 'p1', e.to], ['to', 'p2', e.from]]) {
+      if (e[end]) continue; const pts = RENDERED.get(e.id) || edgePoints(e);
+      const q = e[pk] || (pts && (end === 'from' ? pts[0] : pts[pts.length - 1])); if (!q) continue;
+      let best = null, bd = Infinity;
+      for (const o of doc.nodes) {
+        if (!o.w || !o.h || o.id === other || o.type === 'text' || !LINKABLE(o)) continue;
+        const inside = q.x > o.x && q.x < o.x + o.w && q.y > o.y && q.y < o.y + o.h;
+        if (inside && SH[o.type].container) continue;   // a loose end inside a swimlane / group stays with the shapes in it
+        const dx = Math.max(o.x - q.x, 0, q.x - o.x - o.w), dy = Math.max(o.y - q.y, 0, q.y - o.y - o.h), d = inside ? 0 : Math.hypot(dx, dy);
+        if (d < bd - .01 || (Math.abs(d - bd) <= .01 && best && o.w * o.h < best.w * best.h)) { best = o; bd = d; }
+      }
+      if (!best) continue;
+      let side = 'top', sd0 = Infinity;   // the side whose centre is closest to the loose end
+      for (const sd of SIDES4) { const c = anchorPt(best, sd), d = Math.hypot(c.x - q.x, c.y - q.y); if (d < sd0) { sd0 = d; side = sd; } }
+      setEnd(e, end, best.id, { side });
+      n++;
+    }
+  }
+  ROUTE_CACHE.clear(); renderAll(); scheduleSave();
+  toast(n ? `Nearest Object: attached ${n} loose end${n > 1 ? 's' : ''}` : 'Nearest Object: nothing to attach');
+}
 function distribute(axis) {
   const ns = selNodes(); if (ns.length < 3) { toast('Select 3 or more boxes to distribute'); return; } pushUndo();
   const P = axis === 'h' ? 'x' : 'y', S = axis === 'h' ? 'w' : 'h';
@@ -2403,10 +2665,67 @@ function distribute(axis) {
   renderAll(); scheduleSave();
   toast(`Distributed ${ns.length} boxes ${axis === 'h' ? 'horizontally' : 'vertically'}` + (gap >= 0 ? ' · equal gaps' : ' · equal centre spacing'));
 }
+// Smart guides, like PowerPoint: while shapes are dragged, their left / centre / right (and top / middle / bottom) line up with
+// other shapes' edges and centres when they come close, and a shape dropped between two neighbours snaps to equal gaps.
+// Guides win over the grid within a few pixels; hold Alt to drag freely.
+function smartGuides(dx, dy) {
+  const T = 6 / view.k, ids = new Set(drag.orig.keys());
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const [id, o] of drag.orig) { const n = byId[id]; if (!n) continue; x0 = Math.min(x0, o.x); y0 = Math.min(y0, o.y); x1 = Math.max(x1, o.x + n.w); y1 = Math.max(y1, o.y + n.h); }
+  if (!isFinite(x0)) return { dx: null, dy: null, lines: [] };
+  const W = x1 - x0, H = y1 - y0;
+  const others = doc.nodes.filter(n => !ids.has(n.id) && n.w > 0 && n.h > 0 && !(SH[n.type].container && n.x <= x0 + dx && n.y <= y0 + dy && n.x + n.w >= x1 + dx && n.y + n.h >= y1 + dy));
+  const best = (mine, cand) => { let b = null; for (const [m, off] of mine) for (const c of cand) { const d = c - m; if (Math.abs(d) <= T && (!b || Math.abs(d) < Math.abs(b.d))) b = { d }; } return b; };
+  const bx = best([[x0 + dx, 0], [x0 + dx + W / 2, 0], [x0 + dx + W, 0]], others.flatMap(n => [n.x, n.x + n.w / 2, n.x + n.w]));
+  const by = best([[y0 + dy, 0], [y0 + dy + H / 2, 0], [y0 + dy + H, 0]], others.flatMap(n => [n.y, n.y + n.h / 2, n.y + n.h]));
+  // equal gaps between the two neighbours in the same row / column
+  const gapFit = horiz => {
+    const lo = horiz ? y0 + dy : x0 + dx, hi = lo + (horiz ? H : W), p0 = horiz ? x0 + dx : y0 + dy, L = horiz ? W : H;
+    const row = others.filter(n => horiz ? (n.y < hi && n.y + n.h > lo) : (n.x < hi && n.x + n.w > lo));
+    let A = null, B = null;
+    for (const n of row) { const a0 = horiz ? n.x : n.y, a1 = a0 + (horiz ? n.w : n.h);
+      if (a1 <= p0 + T && (!A || a1 > A.e)) A = { n, e: a1 }; if (a0 >= p0 + L - T && (!B || a0 < B.s)) B = { n, s: a0 }; }
+    if (!A || !B || B.s - A.e <= L) return null;
+    const want = (A.e + B.s - L) / 2, d = want - p0; return Math.abs(d) <= T ? { d, A, B, want } : null;
+  };
+  const gx = gapFit(true), gy = gapFit(false);
+  let ddx = null, ddy = null, gapX = null, gapY = null;
+  if (bx || gx) { if (gx && (!bx || Math.abs(gx.d) < Math.abs(bx.d))) { ddx = dx + gx.d; gapX = gx; } else ddx = dx + bx.d; }
+  if (by || gy) { if (gy && (!by || Math.abs(gy.d) < Math.abs(by.d))) { ddy = dy + gy.d; gapY = gy; } else ddy = dy + by.d; }
+  // guide lines for everything that now lines up exactly
+  const fx = ddx === null ? dx : ddx, fy = ddy === null ? dy : ddy, lines = [];
+  const mx = [x0 + fx, x0 + fx + W / 2, x0 + fx + W], my = [y0 + fy, y0 + fy + H / 2, y0 + fy + H];
+  if (ddx !== null && !gapX) for (const v of mx) { const hit = others.filter(n => [n.x, n.x + n.w / 2, n.x + n.w].some(c => Math.abs(c - v) < .5)); if (hit.length) {
+    const ys = hit.flatMap(n => [n.y, n.y + n.h]).concat(my); lines.push({ x1: f1(v), y1: f1(Math.min(...ys) - 8), x2: f1(v), y2: f1(Math.max(...ys) + 8) }); } }
+  if (ddy !== null && !gapY) for (const v of my) { const hit = others.filter(n => [n.y, n.y + n.h / 2, n.y + n.h].some(c => Math.abs(c - v) < .5)); if (hit.length) {
+    const xs = hit.flatMap(n => [n.x, n.x + n.w]).concat(mx); lines.push({ x1: f1(Math.min(...xs) - 8), y1: f1(v), x2: f1(Math.max(...xs) + 8), y2: f1(v) }); } }
+  if (gapX) { const cy = f1(y0 + fy + H / 2); lines.push({ gap: 1, x1: f1(gapX.A.e), y1: cy, x2: f1(x0 + fx), y2: cy }, { gap: 1, x1: f1(x0 + fx + W), y1: cy, x2: f1(gapX.B.s), y2: cy }); }
+  if (gapY) { const cx = f1(x0 + fx + W / 2); lines.push({ gap: 1, x1: cx, y1: f1(gapY.A.e), x2: cx, y2: f1(y0 + fy) }, { gap: 1, x1: cx, y1: f1(y0 + fy + H), x2: cx, y2: f1(gapY.B.s) }); }
+  return { dx: ddx, dy: ddy, lines };
+}
 function nudge(dx, dy) {
-  if (!sel.nodes.size) return; pushUndo(); freezeAnchors(new Set(sel.nodes));
+  if (!sel.nodes.size && !sel.edges.size) return; pushUndo(); if (sel.nodes.size) freezeAnchors(new Set(sel.nodes));
+  // selected lines move like a dragged line: joints and loose ends move, attached ends slide along their box side
+  const ends = [];
+  for (const e of selEdges()) {
+    const pts = RENDERED.get(e.id) || edgePoints(e); if (!pts) continue;
+    ends.push([e, pts[0], pts[pts.length - 1]]);
+  }
   for (const n of selNodes()) { n.x += dx; n.y += dy; }
-  renderScene(); renderOverlay(); renderPanel(true); scheduleSave();
+  const cl = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  for (const [e, q1, q2] of ends) {
+    if (e.p1 && !e.from) e.p1 = { x: e.p1.x + dx, y: e.p1.y + dy };
+    if (e.p2 && !e.to) e.p2 = { x: e.p2.x + dx, y: e.p2.y + dy };
+    if (Array.isArray(e.via)) e.via = e.via.map(q => ({ x: q.x + dx, y: q.y + dy }));
+    for (const [end, q0] of [['from', q1], ['to', q2]]) {
+      const nid = e[end]; if (!nid || sel.nodes.has(nid)) continue;
+      const n = byId[nid]; if (!n || !n.w || !n.h) continue;
+      const sd = nearestSide(n, q0);
+      const q = sd === 'top' || sd === 'bottom' ? { x: cl(q0.x + dx, n.x, n.x + n.w), y: sd === 'top' ? n.y : n.y + n.h } : { x: sd === 'left' ? n.x : n.x + n.w, y: cl(q0.y + dy, n.y, n.y + n.h) };
+      setEnd(e, end, nid, { side: 'pt', at: { u: +((q.x - n.x) / n.w).toFixed(4), v: +((q.y - n.y) / n.h).toFixed(4) } });
+    }
+  }
+  ROUTE_CACHE.clear(); renderScene(); renderOverlay(); renderPanel(true); scheduleSave();
 }
 function newDiagram() { openTab(null, { reuse: false }); }
 
@@ -2617,11 +2936,14 @@ window.addEventListener('pointermove', ev => {
           if (k) toast(`Detached ${k} line end${k > 1 ? 's' : ''}`);
         }
       }
+      const rawDx = dx, rawDy = dy;
       if (snapOn) {
         let f = drag.orig.get(drag.click) || drag.orig.values().next().value;
         if (!f) { const o = drag.origE.values().next().value; f = o && (o.p1 || o.p2 || o.fromPt || o.toPt); }
         if (f) { dx = snapV(f.x + dx) - f.x; dy = snapV(f.y + dy) - f.y; }
       }
+      drag.guides = null;
+      if (ui.guides !== false && !ev.altKey && drag.orig.size) { const g = smartGuides(rawDx, rawDy); if (g.dx !== null) dx = g.dx; if (g.dy !== null) dy = g.dy; drag.guides = g.lines; }
       for (const [id, o] of drag.orig) { const n = byId[id]; if (n) { n.x = o.x + dx; n.y = o.y + dy; } }
       for (const [id, o] of drag.origE) {
         const e = doc.edges.find(x => x.id === id); if (!e) continue;
@@ -2672,11 +2994,11 @@ window.addEventListener('pointermove', ev => {
       n.x = L; n.y = T; n.w = R - L; n.h = B - T; drag.moved = true;
       renderScene(); renderOverlay(); break;
     }
-    case 'connect': drag.cur = w; drag.target = nodeAt(w, drag.from); drag.anchor = drag.target ? pickAnchor(byId[drag.target], w, false) : null; renderOverlay(); break;
+    case 'connect': drag.cur = w; drag.target = linkNodeAt(w, drag.from); drag.anchor = drag.target ? pickAnchor(byId[drag.target], w, false) : null; renderOverlay(); break;
     case 'draw': { drag.cur = w; const dt = drawSource(w, drag.fromId); drag.target = dt ? dt.id : null; drag.anchor = dt ? dt.an : null; renderOverlay(); break; }  // destination end snaps onto the border, like the source
     case 'reconnect': {
       drag.cur = w; drag.moved = true; const e = doc.edges.find(x => x.id === drag.eid);
-      drag.target = e ? nodeAt(w, drag.end === 'to' ? e.from : e.to) : null;
+      drag.target = e ? linkNodeAt(w, drag.end === 'to' ? e.from : e.to) : null;
       drag.anchor = drag.target ? pickAnchor(byId[drag.target], w, true) : null; renderOverlay(); break;
     }
     case 'ink': {
@@ -2695,12 +3017,13 @@ window.addEventListener('pointermove', ev => {
     case 'marquee': {
       drag.cur = w; const r = rectOf(drag.start, w);
       sel.nodes = new Set(drag.base);
-      for (const n of doc.nodes) if (n.x >= r.x && n.y >= r.y && n.x + n.w <= r.x + r.w && n.y + n.h <= r.y + r.h) sel.nodes.add(n.id);
+      const SM = ui.selMode || 'both';
+      if (SM !== 'line') for (const n of doc.nodes) if (n.x >= r.x && n.y >= r.y && n.x + n.w <= r.x + r.w && n.y + n.h <= r.y + r.h) sel.nodes.add(n.id);
       sel.edges = new Set(drag.baseE);
-      for (const e of doc.edges) { const pts = edgePoints(e); if (pts && lineHitsRect(pts, r)) sel.edges.add(e.id); }
+      if (SM !== 'obj') for (const e of doc.edges) { const pts = edgePoints(e); if (pts && lineHitsRect(pts, r)) sel.edges.add(e.id); }
       sel.ink = new Set(drag.baseK || []);
-      if (!ui.inkHidden) for (const k of doc.ink || []) { const b = inkBox(k); if (b.x >= r.x && b.y >= r.y && b.x + b.w <= r.x + r.w && b.y + b.h <= r.y + r.h) sel.ink.add(k.id); }
-      expandGroups(); renderOverlay(); break;
+      if (!ui.inkHidden && SM !== 'line') for (const k of doc.ink || []) { const b = inkBox(k); if (b.x >= r.x && b.y >= r.y && b.x + b.w <= r.x + r.w && b.y + b.h <= r.y + r.h) sel.ink.add(k.id); }
+      expandGroups(); applySelMode(); renderOverlay(); break;
     }
   }
 });
@@ -2846,7 +3169,7 @@ window.addEventListener('keydown', ev => {
   if (mod && key === 'v') return;   // handled by the paste event: pictures from the clipboard, or sUML objects
   if (mod && key === 'd') { ev.preventDefault(); duplicate(); return; }
   if (mod && key === 'g') { ev.preventDefault(); ev.shiftKey ? ungroupSel() : groupSel(); return; }
-  if (mod && key === 'a') { ev.preventDefault(); clearSel(); doc.nodes.forEach(n => sel.nodes.add(n.id)); doc.edges.forEach(e => sel.edges.add(e.id)); if (!ui.inkHidden) (doc.ink || []).forEach(k => sel.ink.add(k.id)); renderOverlay(); renderPanel(); return; }
+  if (mod && key === 'a') { ev.preventDefault(); clearSel(); doc.nodes.forEach(n => sel.nodes.add(n.id)); doc.edges.forEach(e => sel.edges.add(e.id)); if (!ui.inkHidden) (doc.ink || []).forEach(k => sel.ink.add(k.id)); applySelMode(); renderOverlay(); renderPanel(); return; }
   if (mod && (key === '=' || key === '+')) { ev.preventDefault(); zoomCenter(1.2); return; }
   if (mod && key === '-') { ev.preventDefault(); zoomCenter(1 / 1.2); return; }
   if (ev.shiftKey && !mod && ev.code === 'Digit1') { ev.preventDefault(); fitView(); return; }
@@ -2863,7 +3186,7 @@ window.addEventListener('keydown', ev => {
     else if (key === 'f2') toast(sel.nodes.size + sel.edges.size ? 'Select just one box or line to edit its text (F2)' : 'Select a box or line, then press F2 to edit its text');
     return;
   }
-  const step = ev.shiftKey ? DOT : 1;
+  const step = ev.shiftKey ? (snapOn ? snapStep() : DOT) : 1;
   if (key === 'arrowleft') { ev.preventDefault(); nudge(-step, 0); } else if (key === 'arrowright') { ev.preventDefault(); nudge(step, 0); }
   else if (key === 'arrowup') { ev.preventDefault(); nudge(0, -step); } else if (key === 'arrowdown') { ev.preventDefault(); nudge(0, step); }
 });
@@ -2977,6 +3300,26 @@ function colorRow(label, objs, key, palette, def) {
   return el('div', { class: 'fld' }, el('span', {}, label + (vals.size > 1 ? ' [multiple]' : '')), el('div', { class: 'crow' }, pb, sw));
 }
 let panelKey = '';
+const TYPE_OK = t => t !== 'pool' && t !== 'image';
+const TYPE_LIST = () => Object.keys(SH).filter(TYPE_OK).map(t => [t, SH[t].name]).sort((a, b) => a[1].localeCompare(b[1]));
+function changeType(ns, t) {
+  pushUndo();
+  for (const n of ns) {
+    const old = n.type; if (old === t) continue;
+    if (old === 'class' && t !== 'class') { n.text = [n.text, n.attrs, n.methods].map(x => (x || '').trim()).filter(Boolean).join('\n'); delete n.attrs; delete n.methods; }
+    const d0 = defaults(old), d1 = defaults(t);
+    for (const k of ['fill', 'stroke', 'dash']) if (n[k] === d0[k] || n[k] === undefined) n[k] = d1[k];   // colours you picked yourself are kept
+    for (const k of ['attrs', 'methods', 'tag']) if (d1[k] !== undefined && n[k] === undefined) n[k] = clone(d1[k]);
+    if (SH[t].noText) n.text = '';
+    if (!LINKABLE({ type: t })) for (const e of doc.edges) for (const [end, pk] of [['from', 'p1'], ['to', 'p2']]) {   // a frame holds no lines: their ends stay where they are, loose
+      if (e[end] !== n.id) continue; const pts = RENDERED.get(e.id) || edgePoints(e); if (!pts) continue;
+      const q = end === 'from' ? pts[0] : pts[pts.length - 1]; e[end] = null; delete e[end === 'from' ? 'fromSide' : 'toSide']; delete e[end === 'from' ? 'fromAt' : 'toAt']; e[pk] = { x: f1(q.x), y: f1(q.y) };
+    }
+    n.type = t;
+  }
+  ROUTE_CACHE.clear(); renderAll(); renderPanel(true); scheduleSave();
+  toast(`Changed ${ns.length > 1 ? ns.length + ' shapes' : 'shape'} to ${SH[t].name}` + (SH[t].container ? ' — shapes inside now move with it' : ''));
+}
 function renderPanel(force) {
   const key = [...sel.nodes].join(',') + '|' + [...sel.edges].join(',') + '|' + (selC || '');
   if (!force && key === panelKey && props.contains(document.activeElement)) return;
@@ -3027,6 +3370,12 @@ function layerSection(ns, es) {
 function nodePanel(ns) {
   const one = ns.length === 1 ? ns[0] : null, d = one && SH[one.type];
   const s1 = sec(one ? d.name : ns.length + ' shapes selected');
+  if (ns.every(n => TYPE_OK(n.type))) {   // change the kind of shape, e.g. an imported box into a Frame that holds the shapes inside it
+    const cur = ns.every(n => n.type === ns[0].type) ? ns[0].type : '';
+    const sel_ = el('select', {}, ...(cur ? [] : [el('option', { value: '' }, 'Mixed')]), ...TYPE_LIST().map(([t, nm]) => el('option', { value: t }, nm)));
+    sel_.value = cur; sel_.addEventListener('change', () => { if (sel_.value) changeType(ns, sel_.value); });
+    s1.append(row('Shape type', sel_));
+  }
   if (one) {
     if (one.type === 'class') {
       s1.append(row('Name (first line may be a «stereotype»)', bind(ta(2), ns, 'text')), row('Attributes — one per line', bind(ta(4), ns, 'attrs')), row('Operations — one per line', bind(ta(4), ns, 'methods')));
@@ -3153,6 +3502,10 @@ function helpContent() {
     <p><b>Theme</b> (⚙ Settings) — Basic, Dark, Starry Night, Forest or Burning. Themes recolour the app, the canvas and the default shape and line colours; colours you picked yourself stay. Settings also chooses whether Save As PNG / SVG uses a white background or the theme.</p>
     <p><b>View</b> (top bar, beside zoom) — Fit, Grid, Snap and Smart in one menu; a dot on the button shows Smart is on.</p>
     <p><b>Snip</b> (top bar) — like Snipping Tool: drag over part of the canvas (or click once for the whole view) and the picture is copied to the clipboard; save it as PNG or SVG from the card that appears. <b>Save As</b> can also save the whole diagram as a <code>.png</code> or <code>.svg</code> picture.</p>
+    <p><b>Smart guides</b> (View → Guides) — while you drag, shapes line up with the edges and centres of other shapes and snap to equal gaps between two neighbours, like PowerPoint. Hold <kbd>Alt</kbd> to drag freely. <b>Snap level</b> (View) — ¼, ½ or 1 grid step.</p>
+    <p><b>Select</b> (View) — Both / Objects / Lines: in Objects or Lines mode the other kind can't be clicked, box-selected or picked by <kbd>Ctrl</kbd>+<kbd>A</kbd>. Click the tag in the status bar to go back to Both. Arrow keys move selected lines too.</p>
+    <p><b>Line tools</b> (Align → Line) — <i>Nearest Route</i> keeps each line's start and moves its end on the destination, straight toward it when possible. <i>Nearest Object</i> attaches loose ends to the closest shape. <i>Line Lanes</i> spreads the lines between side-by-side (or stacked) boxes into even, straight lanes and lines them up along a row. <i>Straighten Line</i>: <i>Follow Head</i> keeps the arrow-head end and moves the tail; <i>Follow Tail</i> keeps the start and moves the head.</p>
+    <p><b>Shape type</b> (Properties) — change a shape into another kind, e.g. a Box into a Frame. Frames hold shapes but never take lines, and are clicked on their border or title only.</p>
     <p><b>Import .uxf diagrams</b> — <b>Open</b> (<kbd>Ctrl</kbd>+<kbd>O</kbd>) or drop a <code>.uxf</code> file on the canvas: it opens in a new tab as a sUML diagram (classes, use cases, actors, notes, packages, states, lines with their arrow types, labels and colours). The .uxf file itself is not changed; Save keeps the result as <code>.suml.json</code>.</p>
     <p><b>Shapes panel</b> — ⊟ folds or unfolds every section; drag a section title to change the order; right-click a shape → <i>Add to Favorites</i> (right-click a favourite to remove it).</p>
     <p><b>Where new shapes go</b> — a new shape is placed where you last clicked on empty canvas (on the grid); the next one goes below it. With Smart on and a box selected, it goes next to that box instead.</p>
@@ -3165,7 +3518,7 @@ function helpContent() {
       <tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd></td><td>Undo / redo</td></tr>
       <tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd> <kbd>V</kbd> <kbd>D</kbd></td><td>Copy / paste / duplicate</td></tr>
       <tr><td><kbd>Del</kbd></td><td>Delete selection</td></tr>
-      <tr><td>Arrows (+<kbd>Shift</kbd>)</td><td>Nudge 1 px (10 px)</td></tr>
+      <tr><td>Arrows (+<kbd>Shift</kbd>)</td><td>Nudge shapes and lines 1 px (one grid step)</td></tr>
       <tr><td><kbd>Enter</kbd> / <kbd>F2</kbd></td><td>Edit selected text</td></tr>
       <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Save (to the same file once it has one)</td></tr>
       <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd></td><td>Save As — choose name and folder</td></tr>
@@ -3415,7 +3768,12 @@ const AL_ICONS = {
   dh: '<rect x="3" y="8" width="4" height="8" rx="1"/><rect x="10" y="8" width="4" height="8" rx="1"/><rect x="17" y="8" width="4" height="8" rx="1"/>',
   dv: '<rect x="8" y="3" width="8" height="4" rx="1"/><rect x="8" y="10" width="8" height="4" rx="1"/><rect x="8" y="17" width="8" height="4" rx="1"/>',
   ls: '<rect x="2" y="3" width="7" height="5" rx="1"/><rect x="15" y="16" width="7" height="5" rx="1"/><path d="M9 5.5h4v13h2"/>',
-  lt: '<rect x="2" y="9.5" width="6" height="5" rx="1"/><rect x="16" y="9.5" width="6" height="5" rx="1"/><path d="M8 12h8"/>' };
+  lt: '<rect x="2" y="9.5" width="6" height="5" rx="1"/><rect x="16" y="9.5" width="6" height="5" rx="1"/><path d="M8 12h8"/>',
+  nr: '<rect x="2" y="3" width="7" height="6" rx="1"/><rect x="15" y="15" width="7" height="6" rx="1"/><path d="M9 6h3.5v12H15"/><circle cx="9" cy="6" r="1.4" fill="currentColor"/><circle cx="15" cy="18" r="1.4" fill="currentColor"/>',
+  ll: '<rect x="2" y="4" width="5" height="16" rx="1"/><rect x="17" y="4" width="5" height="16" rx="1"/><path d="M7 8h10M7 12h10M7 16h10"/>',
+  fh: '<rect x="2" y="3" width="6" height="18" rx="1"/><rect x="16" y="9" width="6" height="12" rx="1"/><path d="M8 15h6"/><path d="M12 12l3 3-3 3" /><path d="M8 7h3" stroke-dasharray="1.5 1.5"/>',
+  ft: '<rect x="2" y="9" width="6" height="12" rx="1"/><rect x="16" y="3" width="6" height="18" rx="1"/><path d="M8 15h6"/><path d="M12 12l3 3-3 3"/><circle cx="8" cy="15" r="1.4" fill="currentColor"/>',
+  no: '<rect x="14" y="8" width="8" height="8" rx="1"/><path d="M3 12h7" stroke-dasharray="2 2"/><path d="M10 9l3 3-3 3"/><circle cx="3" cy="12" r="1.4" fill="currentColor"/>' };
 function aoName(dx, dy) {
   const v = dy < 0 ? 'bottom' : dy > 0 ? 'top' : '', h = dx < 0 ? 'right' : dx > 0 ? 'left' : '';
   const v2 = dy < 0 ? 'top' : dy > 0 ? 'bottom' : '', h2 = dx < 0 ? 'left' : dx > 0 ? 'right' : '';
@@ -3481,8 +3839,8 @@ function toggleAlign(force) {
     pop.append(g);
   }
   pop.append(el('hr', { class: 'dsep' }));
-  pop.append(el('div', { class: 'ag two' }, ico('dh', 'Distribute horizontally', () => { if (selNodes().length < 3) return toast('Select 3 or more boxes to distribute'); distribute('h'); }, 'Distribute horizontally (3+ boxes)'),
-    ico('dv', 'Distribute vertically', () => { if (selNodes().length < 3) return toast('Select 3 or more boxes to distribute'); distribute('v'); }, 'Distribute vertically (3+ boxes)')));
+  pop.append(el('div', { class: 'ag two' }, ico('dh', 'Distribute<br>horizontally', () => { if (selNodes().length < 3) return toast('Select 3 or more boxes to distribute'); distribute('h'); }, 'Distribute horizontally (3+ boxes)'),
+    ico('dv', 'Distribute<br>vertically', () => { if (selNodes().length < 3) return toast('Select 3 or more boxes to distribute'); distribute('v'); }, 'Distribute vertically (3+ boxes)')));
   pop.append(el('p', { class: 'pnote', style: 'margin:2px 0 4px' }, 'Only the selected boxes move. Lines between them re-attach to the nearest side centres.'));
   pop.append(el('hr', { class: 'dsep' }));
   pop.append(el('div', { class: 'agh', style: 'border-top:0;padding-top:0' }, 'Auto-order'));
@@ -3493,8 +3851,14 @@ function toggleAlign(force) {
   }
   pop.append(el('div', { class: 'aowrap' }, ao, el('p', { class: 'pnote', style: 'margin:0' }, 'Select one flow (its boxes and arrows). The centre is the first box — it stays put. Click a direction: the rest of the flow goes that way, in order.')));
   pop.append(el('div', { class: 'agh' }, 'Line · Auto-line alignment'));
-  pop.append(el('div', { class: 'ag two' }, Object.assign(ico('ls', 'Auto-route', () => alignLines('smart'), 'Keep both ends where they are; clear joints and re-route the middle with right angles around objects (needs Smart ON)'), { className: 'autoBtn' }),
-    ico('lt', 'Straight', () => alignLines('straight'), 'Clear joints and run lines straight across where boxes face each other')));
+  pop.append(el('div', { class: 'ag' }, Object.assign(ico('ls', 'Auto-route', () => alignLines('smart'), 'Keep both ends where they are; clear joints and re-route the middle with right angles around objects (needs Smart ON)'), { className: 'autoBtn' }),
+    ico('lt', 'Straight', () => alignLines('straight'), 'Clear joints and run lines straight across where boxes face each other'),
+    ico('ll', 'Line Lanes', () => lineLanes(), 'Spread the lines between side-by-side (or stacked) boxes evenly over the facing sides, and line them up across a whole row of boxes: the 1st line of each pair on one level, the 2nd on the next… Lines going back come after the ones going forward.')));
+  pop.append(el('div', { class: 'ag two' }, Object.assign(ico('nr', 'Nearest Route', () => { if (!ui.smart) return toast('Nearest Route needs Smart ON (View menu)'); nearestRoute(); }, 'Keep the start of each line; move its end on the destination object — straight toward it when possible, otherwise the shortest route (needs Smart ON)'), { className: 'autoBtn' }),
+    Object.assign(ico('no', 'Nearest Object', () => { if (!ui.smart) return toast('Nearest Object needs Smart ON (View menu)'); nearestObject(); }, 'Attach each loose line end to the closest object (needs Smart ON)'), { className: 'autoBtn' })));
+  pop.append(el('div', { class: 'agh', style: 'border-top:0;padding-top:4px' }, 'Straighten Line'));
+  pop.append(el('div', { class: 'ag two' }, ico('fh', 'Follow Head', () => straightenLines('head'), 'Keep the arrow-head end where it is; move the tail end on its shape so the line is straight (connected lines)'),
+    ico('ft', 'Follow Tail', () => straightenLines('tail'), 'Keep the tail (start) where it is; move the head end on its shape so the line is straight (connected lines)')));
   pop.append(el('p', { class: 'pnote', style: 'margin:2px 0 0' }, 'Applies to the selected lines — or, if none, the lines on the selected boxes — or, if nothing is selected, every line.'));
 }
 $('#bAlign').onclick = () => toggleAlign();
@@ -4487,7 +4851,7 @@ async function loadConfig() {
 }
 function saveConfig() {
   if (!cfgReady) return;
-  config.ui = { theme: ui.theme, left: ui.left, right: ui.right, smart: ui.smart, layers: ui.layers, layersFolded: ui.layersFolded, smartFolded: ui.smartFolded, inkHidden: ui.inkHidden, cmtHidden: ui.cmtHidden, cmtListClosed: ui.cmtListClosed, cmtListFolded: ui.cmtListFolded, fadeUnrelated: ui.fadeUnrelated, thickOverlap: ui.thickOverlap, flowPos: ui.flowPos, autoLayer: ui.autoLayer, autoLayerStep: ui.autoLayerStep, recentColors: ui.recentColors, defaultText: ui.defaultText, avoidObj: ui.avoidObj, avoidLine: ui.avoidLine, avoidCross: ui.avoidCross, spreadEnds: ui.spreadEnds, exportTheme: ui.exportTheme, pathHidden: ui.pathHidden, pathExport: ui.pathExport, glow: ui.glow };
+  config.ui = { theme: ui.theme, left: ui.left, right: ui.right, smart: ui.smart, layers: ui.layers, layersFolded: ui.layersFolded, smartFolded: ui.smartFolded, inkHidden: ui.inkHidden, cmtHidden: ui.cmtHidden, cmtListClosed: ui.cmtListClosed, cmtListFolded: ui.cmtListFolded, fadeUnrelated: ui.fadeUnrelated, thickOverlap: ui.thickOverlap, flowPos: ui.flowPos, autoLayer: ui.autoLayer, autoLayerStep: ui.autoLayerStep, recentColors: ui.recentColors, defaultText: ui.defaultText, avoidObj: ui.avoidObj, avoidLine: ui.avoidLine, avoidCross: ui.avoidCross, spreadEnds: ui.spreadEnds, exportTheme: ui.exportTheme, pathHidden: ui.pathHidden, pathExport: ui.pathExport, glow: ui.glow, snapStep: ui.snapStep, guides: ui.guides, selMode: ui.selMode };
   const t = JSON.stringify(config, null, 2);
   if (!HAS_HOST) { try { localStorage.setItem(CFG_KEY, t); } catch (_) {} return; }
   clearTimeout(cfgT); cfgPending = true;
@@ -4603,6 +4967,7 @@ window.addEventListener('beforeunload', ev => {
 (async function boot() {
   await loadConfig();
   applyUi();
+  markSelMode();
   buildPalette(); renderBadges();
   let st = null;
   try { st = JSON.parse(localStorage.getItem(TABS_KEY) || 'null'); } catch (_) {}
